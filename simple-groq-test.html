@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Groq API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .input-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        button { background: #2DCE89; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #1a9f6e; }
+        .response { background: #f5f5f5; padding: 15px; border-radius: 5px; margin-top: 20px; white-space: pre-wrap; }
+        .error { background: #ffebee; color: #c62828; }
+    </style>
+</head>
+<body>
+    <h1>🧠 Simple Groq API Test</h1>
+    
+    <div class="input-group">
+        <label for="mood-input">Current Mood:</label>
+        <input type="text" id="mood-input" placeholder="e.g., happy, anxious, sad">
+    </div>
+    
+    <div class="input-group">
+        <label for="pet-sleep-input">Pet's Sleep Hours:</label>
+        <input type="number" id="pet-sleep-input" placeholder="e.g., 8" min="0" max="24" step="0.5">
+    </div>
+    
+    <div class="input-group">
+        <label for="gratitude-input">Today's Gratitude:</label>
+        <textarea id="gratitude-input" placeholder="What are you grateful for today?"></textarea>
+    </div>
+    
+    <div class="input-group">
+        <label for="user-message">Your Message to AI:</label>
+        <textarea id="user-message" placeholder="Ask SoonPsy anything about mental health..."></textarea>
+    </div>
+    
+    <button onclick="sendToSoonPsy()">Send to Groq AI</button>
+    
+    <div id="response" class="response" style="display: none;"></div>
+
+    <script>
+        // Groq API Configuration
+        const GROQ_API_KEY = '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';
+        const GROQ_MODEL = 'openai/gpt-oss-20b';
+        const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
+
+        async function sendToSoonPsy() {
+            try {
+                // Show loading state
+                const responseDiv = document.getElementById('response');
+                responseDiv.style.display = 'block';
+                responseDiv.className = 'response';
+                responseDiv.textContent = '🤖 Sending to Groq AI...';
+
+                // Get user input values
+                const moodInput = document.getElementById('mood-input');
+                const petSleepInput = document.getElementById('pet-sleep-input');
+                const gratitudeInput = document.getElementById('gratitude-input');
+                const userMessageInput = document.getElementById('user-message');
+
+                const currentMood = moodInput ? moodInput.value.trim() : 'Not specified';
+                const currentPetSleep = petSleepInput ? parseFloat(petSleepInput.value) || 0 : 0;
+                const currentGratitude = gratitudeInput ? gratitudeInput.value.trim() : '';
+                const userMessage = userMessageInput ? userMessageInput.value.trim() : 'Hello';
+
+                console.log('Sending to Groq API...');
+                console.log('API Key:', GROQ_API_KEY.substring(0, 10) + '...');
+                console.log('Model:', GROQ_MODEL);
+
+                // Construct system message with context
+                const systemContent = `You are SoonPsy, an AI companion for mental health and well-being.
+
+CURRENT USER CONTEXT:
+- User's mood: ${currentMood}
+- Pet's sleep duration: ${currentPetSleep} hours
+- User's gratitude today: ${currentGratitude || 'None specified'}
+
+ROLE: Provide psychologically accurate insights and supportive guidance for mental health and well-being.
+
+IMPORTANT: Never diagnose mental health conditions or offer medical advice. Always refer to qualified professionals.
+
+Respond with empathy and support.`;
+
+                // Prepare request body (OpenAI-compatible format)
+                const requestBody = {
+                    "model": GROQ_MODEL,
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": systemContent
+                        },
+                        {
+                            "role": "user",
+                            "content": userMessage
+                        }
+                    ],
+                    "temperature": 0.7,
+                    "max_tokens": 800
+                };
+
+                console.log('Request Body:', JSON.stringify(requestBody, null, 2));
+
+                // Make API call
+                const response = await fetch(GROQ_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${GROQ_API_KEY}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                console.log('Response Status:', response.status);
+                console.log('Response Headers:', Object.fromEntries(response.headers.entries()));
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API Error Response:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}\nDetails: ${errorText}`);
+                }
+
+                const data = await response.json();
+                console.log('API Response Data:', data);
+
+                // Check if we got a valid response
+                if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                    throw new Error('Invalid response structure from Groq API');
+                }
+
+                const aiResponse = data.choices[0].message.content;
+                
+                // Display success response
+                responseDiv.className = 'response';
+                responseDiv.textContent = `✅ AI Response:\n\n${aiResponse}`;
+                
+            } catch (error) {
+                console.error('❌ Full Error Details:', error);
+                console.error('Error message:', error.message);
+                console.error('Error stack:', error.stack);
+                
+                const responseDiv = document.getElementById('response');
+                responseDiv.style.display = 'block';
+                responseDiv.className = 'response error';
+                responseDiv.textContent = `❌ Error: ${error.message}\n\nCheck the browser console (F12) for full error details.`;
+            }
+        }
+
+        // Auto-test when page loads
+        window.addEventListener('load', function() {
+            console.log('🚀 Page loaded. Ready to test Groq API.');
+            console.log('📝 Fill in the form and click "Send to Groq AI" to test.');
+        });
+    </script>
+</body>
+</html>

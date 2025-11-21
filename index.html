@@ -1,0 +1,4038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soon - For All</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2DCE89">
+<style>
+/* CSS السابق (تم الحفاظ عليه بالكامل) */
+:root {
+--primary: #2DCE89;
+--primary-dark: #1a9f6e;
+--primary-light: #d1efe1;
+--accent-purple: #8965e0;
+--accent-orange: #fb6340;
+--accent-teal: #11cdef;
+--light-bg: #f7fafc;
+--white: #ffffff;
+--text-dark: #32325d;
+--text-light: #8898aa;
+--border-radius-card: 16px;
+--border-radius-button: 25px;
+--shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+--shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.12);
+--nav-height: 70px;
+}
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+ 
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f0f4f8, #e6eef7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        overflow-x: hidden;
+        color: var(--text-dark);
+    }
+
+    .app-container {
+        width: 100%;
+        max-width: 500px;
+        height: 90vh;
+        max-height: 900px;
+        background-color: var(--white);
+        border-radius: 30px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Header Styles */
+    .app-header {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: var(--white);
+        padding: 30px 20px 20px;
+        border-bottom-left-radius: 24px;
+        border-bottom-right-radius: 24px;
+        position: relative;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+    }
+
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .logo-placeholder {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+        border: 3px solid white;
+    }
+
+    .app-header p {
+        margin: 0;
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+
+    .app-header h3 {
+        margin: 10px 0 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .header-controls {
+        position: absolute;
+        top: 25px;
+        right: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .header-auth-btn, .header-sound-btn {
+        background: var(--white);
+        color: var(--primary);
+        padding: 8px 15px;
+        border-radius: var(--border-radius-button);
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.85rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .header-controls button:hover {
+        background-color: var(--primary-light);
+        transform: translateY(-2px);
+    }
+
+    .app-main {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 0 20px;
+        padding-bottom: calc(20px + var(--nav-height));
+    }
+
+    .app-main::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .app-main::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .app-main::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 10px;
+    }
+
+    .page {
+        display: none;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+    }
+
+    .page.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    h2.page-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 25px 0;
+        text-align: center;
+        position: relative;
+    }
+
+    h2.page-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--primary);
+        border-radius: 2px;
+    }
+
+    .card {
+        background-color: var(--white);
+        border-radius: var(--border-radius-card);
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    button {
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        border: none;
+        border-radius: var(--border-radius-button);
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .primary-button {
+        background: linear-gradient(to right, var(--primary), var(--primary-dark));
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(45, 206, 137, 0.3);
+    }
+
+    .primary-button:hover {
+        background: linear-gradient(to right, var(--primary-dark), #16855f);
+        transform: translateY(-3px);
+    }
+
+    .secondary-button {
+        background-color: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .secondary-button:hover {
+        background-color: #b8e5d2;
+        transform: translateY(-3px);
+    }
+
+    /* Home Page Styles */
+    #home-page .welcome-card {
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, var(--accent-purple), var(--primary));
+        color: var(--white);
+        padding: 20px;
+        margin-top: 10px;
+        border-radius: var(--border-radius-card);
+    }
+
+    #home-page .card-content {
+        flex: 1;
+        padding-right: 15px;
+    }
+
+    #home-page .card-content h4 {
+        margin: 0 0 10px;
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+
+    #home-page .card-content p {
+        margin: 0 0 15px;
+        font-size: 1rem;
+        opacity: 0.9;
+        line-height: 1.6;
+    }
+
+    #home-page .welcome-card img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid var(--white);
+        flex-shrink: 0;
+        background: var(--accent-teal);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        color: var(--text-dark);
+        margin: 30px 0 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f4ff;
+    }
+
+    .resource-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border-left: 4px solid var(--primary);
+    }
+
+    .resource-card:hover {
+        background-color: rgba(240, 244, 255, 0.3);
+    }
+
+    .resource-card .icon {
+        width: 60px;
+        height: 60px;
+        background: #f0f4ff;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: var(--primary);
+        flex-shrink: 0;
+    }
+
+    .resource-info {
+        flex-grow: 1;
+    }
+
+    .resource-info h5 {
+        margin: 0 0 5px;
+        font-size: 1.1rem;
+        color: var(--text-dark);
+    }
+
+    .resource-info p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--text-light);
+    }
+
+    /* Mood Tracker */
+    .mood-tracker {
+        background-color: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 20px;
+        margin: 30px 0;
+        box-shadow: var(--shadow);
+    }
+
+    .mood-tracker h3 {
+        font-size: 1.3rem;
+        color: var(--text-dark);
+        margin-top: 0;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .mood-options {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .mood-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        width: 70px;
+    }
+
+    .mood-option:hover {
+        background-color: #f0f4ff;
+        transform: translateY(-5px);
+    }
+
+    .mood-option.selected {
+        background-color: #f0f4ff;
+        transform: scale(1.1);
+    }
+
+    .mood-icon {
+        font-size: 2.2rem;
+        margin-bottom: 8px;
+    }
+
+    .mood-label {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        font-weight: 600;
+    }
+
+    /* Journal Page */
+    .journal-entry {
+        margin-bottom: 30px;
+    }
+
+    #journal-text {
+        width: 100%;
+        height: 180px;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius-card);
+        padding: 15px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        resize: vertical;
+        margin-bottom: 20px;
+        line-height: 1.6;
+        transition: all 0.3s ease;
+    }
+
+    #journal-text:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(45, 206, 137, 0.2);
+        outline: none;
+    }
+
+    /* Relaxation Page */
+    .relaxation-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .relaxation-card {
+        position: relative;
+        border-radius: var(--border-radius-card);
+        overflow: hidden;
+        height: 150px;
+        display: flex;
+        align-items: flex-end;
+        color: white;
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+        background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+        cursor: pointer;
+    }
+
+    .relaxation-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .relaxation-card .content {
+        padding: 15px;
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    }
+
+    .relaxation-card h5 {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    /* Meditation Page */
+    #meditation-page {
+        text-align: center;
+    }
+
+    .meditation-container {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 25px;
+        box-shadow: var(--shadow);
+        margin: 20px 0;
+    }
+
+    .breathing-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        margin: 30px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(45, 206, 137, 0.3);
+    }
+
+    .breathing-instruction {
+        font-size: 1.2rem;
+        margin: 20px 0;
+        min-height: 60px;
+    }
+
+    .breathing-controls {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .nature-image {
+        width: 100%;
+        height: 150px;
+        border-radius: var(--border-radius-card);
+        margin: 20px 0;
+        background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+                    url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .breathing-animation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 5px solid rgba(255,255,255,0.5);
+        transform: scale(0);
+        animation: breath 8s infinite;
+    }
+
+    @keyframes breath {
+        0%, 100% { transform: scale(0); opacity: 0.5; }
+        50% { transform: scale(1.2); opacity: 0; }
+    }
+
+    /* Reflection Game Page */
+    #reflection-page {
+        text-align: center;
+    }
+
+    .reflection-container {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 25px;
+        box-shadow: var(--shadow);
+        margin: 20px 0;
+    }
+
+    .scenario-display {
+        background: #f0f4ff;
+        border-radius: var(--border-radius-card);
+        padding: 20px;
+        margin: 20px 0;
+        min-height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        font-weight: 500;
+        line-height: 1.6;
+    }
+
+    .timer-display {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin: 20px 0;
+    }
+
+    .response-area {
+        width: 100%;
+        height: 200px;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius-card);
+        padding: 15px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        resize: vertical;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .quote-display {
+        background: var(--primary-light);
+        border-radius: var(--border-radius-card);
+        padding: 15px;
+        margin: 15px 0;
+        font-size: 0.95rem;
+        text-align: center;
+        border-left: 4px solid var(--primary);
+        font-style: italic;
+    }
+
+    .response-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        justify-content: center;
+    }
+
+    /* Piano Page */
+    #piano-page {
+        text-align: center;
+    }
+
+    .piano-container {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 25px;
+        box-shadow: var(--shadow);
+        margin: 20px 0;
+    }
+
+    .piano {
+        display: flex;
+        justify-content: center;
+        margin: 30px 0;
+        position: relative;
+        height: 180px;
+    }
+
+    .key {
+        width: 40px;
+        height: 160px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 0 0 4px 4px;
+        cursor: pointer;
+        position: relative;
+        z-index: 1;
+        transition: all 0.1s;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        font-weight: 600;
+        color: var(--text-light);
+        padding-bottom: 10px;
+    }
+
+    .key.black {
+        width: 28px;
+        height: 100px;
+        background: #32325d;
+        z-index: 2;
+        margin: 0 -14px;
+        color: white;
+    }
+
+    .key.active {
+        background: var(--primary);
+        color: white;
+    }
+
+    .key.black.active {
+        background: var(--primary-dark);
+    }
+
+    /* Therapy Sessions */
+    .session-card {
+        background: linear-gradient(135deg, var(--accent-purple), var(--primary));
+        color: white;
+        padding: 20px;
+        border-radius: var(--border-radius-card);
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .session-card h3 {
+        margin-bottom: 15px;
+    }
+
+    /* Notification */
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border-radius: var(--border-radius-card);
+        box-shadow: var(--shadow-hover);
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        z-index: 2000;
+        transform: translateX(120%);
+        transition: transform 0.5s ease;
+    }
+
+    .notification.show {
+        transform: translateX(0);
+    }
+
+    .notification-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    .notification-content h4 {
+        margin-bottom: 5px;
+    }
+
+    .notification-content p {
+        font-size: 0.9rem;
+        color: var(--text-light);
+    }
+
+    /* AI Assistant */
+    .ai-assistant {
+        background: white;
+        border-radius: var(--border-radius-card);
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .ai-header {
+        background: linear-gradient(to right, var(--primary), var(--primary-dark));
+        color: white;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .ai-icon {
+        width: 40px;
+        height: 40px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        font-size: 1.2rem;
+    }
+
+    .ai-response {
+        padding: 20px;
+        min-height: 100px;
+        line-height: 1.6;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .typing-indicator {
+        display: flex;
+        padding: 10px 0;
+    }
+
+    .typing-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--text-light);
+        border-radius: 50%;
+        margin: 0 3px;
+        opacity: 0.6;
+        animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+        0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+        30% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    .ai-input {
+        display: flex;
+        padding: 15px;
+        background: var(--light-bg);
+    }
+
+    .ai-input input {
+        flex-grow: 1;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .ai-input input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(45, 206, 137, 0.2);
+    }
+
+    .ai-input button {
+        background: var(--primary);
+        color: white;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .ai-input button:hover {
+        background: var(--primary-dark);
+        transform: scale(1.05);
+    }
+
+    /* Audio Player */
+    .audio-player {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 15px 0;
+    }
+
+    .play-pause-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        border: none;
+        cursor: pointer;
+    }
+
+    .progress-container {
+        flex-grow: 1;
+        height: 8px;
+        background: #eee;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: var(--primary);
+        width: 0%;
+        transition: width 0.1s linear;
+    }
+
+    .audio-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .audio-description {
+        font-size: 0.9rem;
+        color: var(--text-light);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: var(--nav-height);
+        background-color: var(--white);
+        border-top: 1px solid #eee;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        z-index: 100;
+    }
+
+    .bottom-nav .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        background: none;
+        border: none;
+        color: var(--text-light);
+        font-size: 0.75rem;
+        padding: 8px 0;
+        transition: all 0.3s ease;
+    }
+
+    .bottom-nav .nav-item i {
+        font-size: 1.4rem;
+        margin-bottom: 4px;
+    }
+
+    .bottom-nav .nav-item.active {
+        color: var(--primary);
+    }
+
+    .bottom-nav .nav-item.active i {
+        transform: scale(1.2);
+    }
+
+    /* Psychology Articles */
+    .article-card {
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: var(--border-radius-card);
+        background: var(--white);
+        box-shadow: var(--shadow);
+    }
+
+    .article-card h4 {
+        color: var(--text-dark);
+        margin-bottom: 10px;
+    }
+
+    .article-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        font-size: 0.85rem;
+        color: var(--text-light);
+    }
+
+    .article-content {
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .article-actions {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .article-source {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .copy-to-journal {
+        background: var(--primary-light);
+        color: var(--primary);
+        border: none;
+        padding: 6px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .journal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .journal-share-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    /* Relaxing Music Page */
+    #music-page {
+        text-align: center;
+    }
+
+    .music-container {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 25px;
+        box-shadow: var(--shadow);
+        margin: 20px 0;
+    }
+
+    .music-track {
+        margin-bottom: 20px;
+    }
+
+    .track-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--text-dark);
+    }
+
+    .track-description {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-bottom: 15px;
+    }
+
+    /* AI Message Styles */
+    .ai-message {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 12px 15px;
+        margin: 10px 0;
+        border-left: 4px solid var(--primary);
+    }
+
+    .user-message {
+        background: #e8f5e9;
+        border-radius: 12px;
+        padding: 12px 15px;
+        margin: 10px 0;
+        border-left: 4px solid #4caf50;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 500px) {
+        .app-container {
+            height: 95vh;
+            border-radius: 25px;
+        }
+
+        .app-header {
+            padding: 25px 15px 15px;
+        }
+
+        .logo-placeholder {
+            width: 70px;
+            height: 70px;
+            font-size: 1.8rem;
+        }
+
+        h2.page-title {
+            font-size: 1.6rem;
+        }
+
+        .relaxation-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .breathing-circle {
+            width: 180px;
+            height: 180px;
+        }
+    }
+
+    /* Authentication Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 30px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        position: relative;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-light);
+    }
+
+    .auth-form {
+        margin-top: 20px;
+        display: none;
+    }
+
+    .auth-form.active {
+        display: block;
+    }
+
+    .auth-form h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: var(--primary-dark);
+    }
+
+    .auth-input {
+        width: 100%;
+        padding: 12px 15px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius-button);
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+    }
+
+    .auth-input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(45, 206, 137, 0.2);
+    }
+
+    .auth-button {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(to right, var(--primary), var(--primary-dark));
+        color: var(--white);
+        border: none;
+        border-radius: var(--border-radius-button);
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .auth-toggle {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.9rem;
+    }
+
+    .auth-toggle a {
+        color: var(--primary);
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .auth-error {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        text-align: center;
+        min-height: 20px;
+    }
+
+    /* Journal entry styles */
+    .journal-entry-card {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: var(--shadow);
+    }
+
+    .journal-entry-card h4 {
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+
+    .journal-mood {
+        display: inline-block;
+        background: var(--primary-light);
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+
+    .journal-content {
+        line-height: 1.6;
+    }
+
+    /* Back button */
+    .back-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--primary);
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        cursor: pointer;
+    }
+
+    .article-header {
+        position: relative;
+        text-align: center;
+        padding: 15px 0;
+    }
+
+    /* Animal Section Styles */
+    .pet-profile {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .pet-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin: 0 auto 15px;
+        background: linear-gradient(135deg, var(--accent-purple), var(--primary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+        border: 4px solid var(--white);
+        box-shadow: var(--shadow);
+    }
+
+    .pet-info {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow);
+    }
+
+    .pet-info h4 {
+        color: var(--primary-dark);
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .pet-info-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .pet-info-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .pet-info-label {
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .pet-info-value {
+        color: var(--text-light);
+    }
+
+    .tracker-card {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow);
+        text-align: center;
+    }
+
+    .tracker-card h4 {
+        color: var(--primary-dark);
+        margin-bottom: 15px;
+    }
+
+    .tracker-stats {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .tracker-stat {
+        text-align: center;
+    }
+
+    .tracker-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 5px;
+    }
+
+    .tracker-label {
+        font-size: 0.85rem;
+        color: var(--text-light);
+    }
+
+    .tracker-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tracker-input {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius-button);
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+    }
+
+    .tracker-input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(45, 206, 137, 0.2);
+    }
+
+    .activity-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .activity-card {
+        background: linear-gradient(135deg, var(--accent-purple), var(--primary));
+        color: white;
+        padding: 15px;
+        border-radius: var(--border-radius-card);
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .activity-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .activity-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .activity-title {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .pet-tips {
+        background: var(--primary-light);
+        border-radius: var(--border-radius-card);
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .pet-tips h4 {
+        color: var(--primary-dark);
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .pet-tips ul {
+        padding-left: 20px;
+        margin-bottom: 0;
+    }
+
+    .pet-tips li {
+        margin-bottom: 8px;
+        line-height: 1.5;
+    }
+
+    .pet-tips li:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Sleep and Exercise Tracking */
+    .sleep-exercise-tracker {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .tracker-section {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 15px;
+        box-shadow: var(--shadow);
+        text-align: center;
+    }
+
+    .tracker-section h4 {
+        color: var(--primary-dark);
+        margin-bottom: 15px;
+    }
+
+    .progress-circle {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 15px;
+        position: relative;
+    }
+
+    .progress-circle svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+    }
+
+    .progress-circle-bg {
+        fill: none;
+        stroke: #eee;
+        stroke-width: 8;
+    }
+
+    .progress-circle-fill {
+        fill: none;
+        stroke: var(--primary);
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: stroke-dasharray 0.5s ease;
+    }
+
+    .progress-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .tracker-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .tracker-btn {
+        padding: 8px 15px;
+        border-radius: var(--border-radius-button);
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        border: none;
+    }
+
+    .tracker-add {
+        background: var(--primary);
+        color: white;
+    }
+
+    .tracker-view {
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    /* Rest Tracking Styles */
+    .rest-tracker {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 15px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .rest-tracker h4 {
+        color: var(--primary-dark);
+        margin-bottom: 15px;
+    }
+
+    .rest-progress-circle {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 15px;
+        position: relative;
+    }
+
+    .rest-progress-circle svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+    }
+
+    .rest-progress-circle-bg {
+        fill: none;
+        stroke: #eee;
+        stroke-width: 8;
+    }
+
+    .rest-progress-circle-fill {
+        fill: none;
+        stroke: var(--accent-purple);
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: stroke-dasharray 0.5s ease;
+    }
+
+    .rest-progress-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--accent-purple);
+    }
+
+    .rest-input {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius-button);
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+
+    .rest-input:focus {
+        border-color: var(--accent-purple);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(137, 101, 224, 0.2);
+    }
+
+    .rest-log-btn {
+        background: var(--accent-purple);
+        color: white;
+        padding: 10px 20px;
+        border-radius: var(--border-radius-button);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .rest-log-btn:hover {
+        background: #7b54d0;
+        transform: translateY(-2px);
+    }
+
+    .rest-stats {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+    }
+
+    .rest-stat {
+        text-align: center;
+    }
+
+    .rest-stat-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--accent-purple);
+    }
+
+    .rest-stat-label {
+        font-size: 0.8rem;
+        color: var(--text-light);
+    }
+
+    /* New Gratitude Feature Styles */
+    .gratitude-card {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 15px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .gratitude-card h4 {
+        color: var(--primary-dark);
+        margin-bottom: 15px;
+    }
+
+    .gratitude-input {
+        width: 100%;
+        min-height: 100px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius-card);
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        margin-bottom: 10px;
+        line-height: 1.6;
+        resize: vertical;
+    }
+
+    .gratitude-input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(45, 206, 137, 0.2);
+    }
+
+    .gratitude-save-btn {
+        background: var(--accent-purple);
+        color: white;
+        padding: 10px 20px;
+        border-radius: var(--border-radius-button);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .gratitude-save-btn:hover {
+        background: #7b54d0;
+        transform: translateY(-2px);
+    }
+
+    .gratitude-share-btn {
+        background: var(--primary);
+        color: white;
+        padding: 10px 20px;
+        border-radius: var(--border-radius-button);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .gratitude-share-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .gratitude-stats {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+    }
+
+    .gratitude-stat {
+        text-align: center;
+    }
+
+    .gratitude-stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent-purple);
+    }
+
+    .gratitude-stat-label {
+        font-size: 0.8rem;
+        color: var(--text-light);
+    }
+
+    .gratitude-list {
+        background: var(--white);
+        border-radius: var(--border-radius-card);
+        padding: 15px;
+        box-shadow: var(--shadow);
+        margin-bottom: 15px;
+    }
+
+    .gratitude-item {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 10px;
+    }
+
+    .gratitude-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .gratitude-date {
+        font-size: 0.8rem;
+        color: var(--text-light);
+        margin-bottom: 5px;
+    }
+
+    .gratitude-content {
+        font-style: italic;
+        line-height: 1.5;
+    }
+</style>
+</head>
+<body>
+<!-- Authentication Modal -->
+<div class="modal" id="auth-modal">
+<div class="modal-content">
+<span class="close-modal" id="close-modal">×</span>
+<div class="auth-form active" id="login-form">
+<h3>Login to Soon</h3>
+<div class="auth-error" id="login-error"></div>
+<input type="email" class="auth-input" id="login-email" placeholder="Email">
+<input type="password" class="auth-input" id="login-password" placeholder="Password">
+<button class="auth-button" id="login-btn">Login</button>
+<div class="auth-toggle">
+<span>Don't have an account?</span>
+<a id="show-signup">Sign Up</a>
+</div>
+</div>
+<div class="auth-form" id="signup-form">
+<h3>Create an Account</h3>
+<div class="auth-error" id="signup-error"></div>
+<input type="text" class="auth-input" id="signup-name" placeholder="Full Name">
+<input type="email" class="auth-input" id="signup-email" placeholder="Email">
+<input type="password" class="auth-input" id="signup-password" placeholder="Password">
+<input type="password" class="auth-input" id="signup-confirm" placeholder="Confirm Password">
+<button class="auth-button" id="signup-btn">Sign Up</button>
+<div class="auth-toggle">
+<span>Already have an account?</span>
+<a id="show-login">Login</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification -->
+<div class="notification" id="mood-notification">
+    <div class="notification-icon">
+        <i class="fas fa-smile"></i>
+    </div>
+    <div class="notification-content">
+        <h4>How are you feeling today?</h4>
+        <p>Take a moment to track your mood</p>
+    </div>
+</div>
+
+<div class="notification" id="quote-notification">
+    <div class="notification-icon">
+        <i class="fas fa-quote-right"></i>
+    </div>
+    <div class="notification-content">
+        <h4>Psychological Insight</h4>
+        <p id="quote-text">"The mind is everything. What you think you become."</p>
+    </div>
+</div>
+
+<div class="app-container">
+    <header class="app-header">
+        <div class="logo-container">
+            <div class="logo-placeholder">
+                S
+            </div>
+        </div>
+        <h3>Soon</h3>
+        <p>For All</p>
+        <div class="header-controls">
+            <button class="header-sound-btn" id="toggle-music">
+                <i class="fas fa-music"></i>
+            </button>
+            <button class="header-sound-btn" id="toggle-nature">
+                <i class="fas fa-tree"></i>
+            </button>
+            <button class="header-auth-btn" id="auth-btn">Login</button>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <!-- SoonPsy AI Assistant -->
+            <div class="ai-assistant">
+                <div class="ai-header">
+                    <div class="ai-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>SoonPsy - Mental Wellness Companion</h3>
+                </div>
+                <div class="ai-response" id="ai-response">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+                <div class="ai-input">
+                    <input type="text" id="ai-input" placeholder="How are you feeling today? Ask SoonPsy for insights...">
+                    <button id="ai-send"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+            <!-- Mood Tracker -->
+            <div class="mood-tracker">
+                <h3>Track Your Mood</h3>
+                <div class="mood-options">
+                    <div class="mood-option" data-mood="excellent">
+                        <div class="mood-icon">😁</div>
+                        <div class="mood-label">Excellent</div>
+                    </div>
+                    <div class="mood-option" data-mood="good">
+                        <div class="mood-icon">😊</div>
+                        <div class="mood-label">Good</div>
+                    </div>
+                    <div class="mood-option" data-mood="neutral">
+                        <div class="mood-icon">😐</div>
+                        <div class="mood-label">Neutral</div>
+                    </div>
+                    <div class="mood-option" data-mood="bad">
+                        <div class="mood-icon">😔</div>
+                        <div class="mood-label">Bad</div>
+                    </div>
+                    <div class="mood-option" data-mood="terrible">
+                        <div class="mood-icon">😢</div>
+                        <div class="mood-label">Terrible</div>
+                    </div>
+                </div>
+                <button class="primary-button" id="share-mood-with-ai" style="width: 100%; margin-top: 15px;">Share Mood with SoonPsy</button>
+            </div>
+
+            <!-- Gratitude Tracker -->
+            <div class="gratitude-card">
+                <h4><i class="fas fa-heart"></i> Gratitude Journal</h4>
+                <textarea id="gratitude-input" class="gratitude-input" placeholder="What are you grateful for today? (Write 1-3 things)"></textarea>
+                <button class="gratitude-save-btn" id="save-gratitude">Save Gratitude</button>
+                <button class="gratitude-share-btn" id="share-gratitude-with-ai">Share with SoonPsy</button>
+                <div class="gratitude-stats">
+                    <div class="gratitude-stat">
+                        <div class="gratitude-stat-value" id="gratitude-count">0</div>
+                        <div class="gratitude-stat-label">This Week</div>
+                    </div>
+                    <div class="gratitude-stat">
+                        <div class="gratitude-stat-value" id="gratitude-total">0</div>
+                        <div class="gratitude-stat-label">Total Entries</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sleep, Exercise, and Rest Tracking -->
+            <div class="sleep-exercise-tracker">
+                <div class="tracker-section">
+                    <h4>Sleep Tracker</h4>
+                    <div class="progress-circle">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="progress-circle-bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="progress-circle-fill" cx="50" cy="50" r="40" id="sleep-progress" stroke-dasharray="0 251.2"></circle>
+                        </svg>
+                        <div class="progress-text" id="sleep-hours">0h</div>
+                    </div>
+                    <p>Last night: <span id="last-sleep">Not tracked</span></p>
+                    <div class="tracker-buttons">
+                        <button class="tracker-btn tracker-add" id="log-sleep">Log Sleep</button>
+                        <button class="tracker-btn tracker-view" id="view-sleep-history">History</button>
+                    </div>
+                </div>
+
+                <div class="tracker-section">
+                    <h4>Exercise Tracker</h4>
+                    <div class="progress-circle">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="progress-circle-bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="progress-circle-fill" cx="50" cy="50" r="40" id="exercise-progress" stroke-dasharray="0 251.2"></circle>
+                        </svg>
+                        <div class="progress-text" id="exercise-mins">0m</div>
+                    </div>
+                    <p>Today: <span id="today-exercise">0 minutes</span></p>
+                    <div class="tracker-buttons">
+                        <button class="tracker-btn tracker-add" id="log-exercise">Log Exercise</button>
+                        <button class="tracker-btn tracker-view" id="view-exercise-history">History</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rest Tracker -->
+            <div class="rest-tracker">
+                <h4>Rest/Break Tracker</h4>
+                <div class="rest-progress-circle">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="rest-progress-circle-bg" cx="50" cy="50" r="40"></circle>
+                        <circle class="rest-progress-circle-fill" cx="50" cy="50" r="40" id="rest-progress" stroke-dasharray="0 251.2"></circle>
+                    </svg>
+                    <div class="rest-progress-text" id="rest-mins">0m</div>
+                </div>
+                <p>Today: <span id="today-rest">0 minutes</span></p>
+                <input type="number" class="rest-input" id="rest-input" placeholder="Minutes rested today" min="0" max="1440" step="5">
+                <button class="rest-log-btn" id="log-rest">Log Rest</button>
+                <button class="primary-button" id="share-rest-with-ai" style="width: 100%; margin-top: 10px; background: var(--accent-purple);">Share Rest Data with SoonPsy</button>
+            </div>
+
+            <h3 class="section-title">Wellness Tools</h3>
+
+            <!-- Journal -->
+            <div class="card resource-card" id="journal-card">
+                <div class="icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="resource-info">
+                    <h5>Journal</h5>
+                    <p>Record your thoughts and reflections</p>
+                </div>
+            </div>
+
+            <!-- Relaxation -->
+            <div class="card resource-card" id="relaxation-card">
+                <div class="icon">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <div class="resource-info">
+                    <h5>Relaxation Library</h5>
+                    <p>Guided meditations and calming exercises</p>
+                </div>
+            </div>
+
+            <!-- Psychology Articles -->
+            <div class="card resource-card" id="articles-card">
+                <div class="icon">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <div class="resource-info">
+                    <h5>Psychology Insights</h5>
+                    <p>Scientific articles on mental health</p>
+                </div>
+            </div>
+
+            <!-- Animal Companion -->
+            <div class="card resource-card" id="animal-card">
+                <div class="icon">
+                    <i class="fas fa-paw"></i>
+                </div>
+                <div class="resource-info">
+                    <h5>Animal Companion</h5>
+                    <p>Track your pet's health and activities</p>
+                </div>
+            </div>
+
+            <!-- Reflection Game -->
+            <div class="card resource-card" id="reflection-card">
+                <div class="icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="resource-info">
+                    <h5>Psychological Reflection</h5>
+                    <p>Explore your thoughts and feelings</p>
+                </div>
+            </div>
+
+            <!-- Therapy Sessions -->
+            <div class="session-card">
+                <h3>Therapy Sessions Available</h3>
+                <p>Professional therapy sessions with certified psychologists</p>
+                <button class="primary-button" style="margin-top: 15px;">Book Session</button>
+            </div>
+        </div>
+
+        <!-- Journal Page -->
+        <div id="journal-page" class="page">
+            <h2 class="page-title">Journal</h2>
+
+            <div class="journal-entry">
+                <h3 class="section-title">Daily Reflection</h3>
+                <textarea id="journal-text" placeholder="How was your day? What are you feeling?"></textarea>
+                <input id="mood-input" placeholder="Mood (e.g. happy, sad, anxious)" class="auth-input" style="margin-bottom: 15px;">
+                <button class="primary-button" id="save-journal">Save Entry</button>
+                <button class="secondary-button" id="share-journal-with-ai" style="margin-left: 10px;">Share with SoonPsy</button>
+            </div>
+
+            <h3 class="section-title">Previous Entries</h3>
+            <div id="journal-history">
+                <!-- Journal entries will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Relaxation Page -->
+        <div id="relaxation-page" class="page">
+            <h2 class="page-title">Relaxation Library</h2>
+
+            <div class="relaxation-grid">
+                <div class="relaxation-card" id="meditation-card">
+                    <div class="content">
+                        <h5><i class="fas fa-cloud-moon"></i> Meditation</h5>
+                    </div>
+                </div>
+                <div class="relaxation-card" id="nature-card">
+                    <div class="content">
+                        <h5><i class="fas fa-tree"></i> Nature Sounds</h5>
+                    </div>
+                </div>
+                <div class="relaxation-card" id="music-card">
+                    <div class="content">
+                        <h5><i class="fas fa-music"></i> Relaxing Music</h5>
+                    </div>
+                </div>
+                <div class="relaxation-card" id="piano-card">
+                    <div class="content">
+                        <h5><i class="fas fa-music"></i> Piano</h5>
+                    </div>
+                </div>
+                <div class="relaxation-card" id="affirmations-card">
+                    <div class="content">
+                        <h5><i class="fas fa-heart"></i> Positive Affirmations</h5>
+                    </div>
+                </div>
+                <div class="relaxation-card" id="walk-card">
+                    <div class="content">
+                        <h5><i class="fas fa-walking"></i> 30-Minute Walk</h5>
+                    </div>
+                </div>
+                <div class="relaxation-card" id="food-card">
+                    <div class="content">
+                        <h5><i class="fas fa-apple-alt"></i> Healthy Food Tracking</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meditation Page -->
+        <div id="meditation-page" class="page">
+            <div class="article-header">
+                <button class="back-button" id="back-to-relax">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Guided Meditation</h2>
+            </div>
+
+            <div class="meditation-container">
+                <div class="breathing-instruction" id="breathing-instruction">
+                    Take a deep breath. Inhale... then exhale.
+                </div>
+
+                <div class="breathing-circle" id="breathing-circle">
+                    <div id="circle-text">Inhale</div>
+                    <div class="breathing-animation"></div>
+                </div>
+
+                <div class="nature-image"></div>
+
+                <div class="breathing-controls">
+                    <button class="primary-button" id="start-meditation">Begin Meditation</button>
+                    <button class="secondary-button" id="stop-meditation">Stop</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nature Sounds Page -->
+        <div id="nature-page" class="page">
+            <div class="article-header">
+                <button class="back-button" id="back-to-relax-1">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Nature Sounds</h2>
+            </div>
+
+            <div class="meditation-container">
+                <div id="nature-sounds-container" style="padding:20px; text-align:center; color:#fff; transition: background 1s ease; background-size: cover; background-position: center; border-radius: var(--border-radius-card); margin-bottom: 20px;">
+                    <div class="nature-image" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+                        url('https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80'); height: 200px; border-radius: var(--border-radius-card);">
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <button class="primary-button" onclick="playSound('birds')">
+                            <i class="fas fa-dove"></i> Birds Singing
+                        </button>
+                        <button class="primary-button" onclick="playSound('waves')">
+                            <i class="fas fa-water"></i> Ocean Waves
+                        </button>
+                        <button class="secondary-button" onclick="stopSound()">
+                            <i class="fas fa-stop"></i> Stop Sound
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Psychology Articles Page -->
+        <div id="articles-page" class="page">
+            <h2 class="page-title">Psychology Insights</h2>
+
+            <div class="article-card" data-article-title="The Science of Happiness" data-article-content="What is the secret to happiness? Does happiness come from within, or is it shaped by external influences such as our jobs, health, relationships and material circumstances? A new study shows that happiness can come from either within or from external influences, from both, or neither -- and which is true differs across people" data-article-source="https://www.sciencedaily.com/releases/2025/05/250502102702.htm">
+                <h4>The Science of Happiness</h4>
+                <div class="article-meta">
+                    <span>Science Daily</span>
+                    <span>May 2, 2025</span>
+                </div>
+                <div class="article-content">
+                    <p>What is the secret to happiness? Does happiness come from within, or is it shaped by external influences such as our jobs, health, relationships and material circumstances? A new study shows that happiness can come from either within or from external influences, from both, or neither -- and which is true differs across people</p>
+                </div>
+                <div class="article-actions">
+                    <a href="https://www.sciencedaily.com/releases/2025/05/250502102702.htm" class="article-source" target="_blank">Read Full Article</a>
+                    <button class="copy-to-journal" onclick="copyArticleToClipboard(this)">
+                        <i class="fas fa-copy"></i> Copy Article
+                    </button>
+                </div>
+            </div>
+
+            <div class="article-card" data-article-title="Understanding Anxiety Disorders" data-article-content="A comprehensive review of anxiety disorders reveals new insights into their neurobiological basis and effective treatment approaches. The study emphasizes the importance of cognitive-behavioral therapy and mindfulness-based interventions in managing anxiety symptoms." data-article-source="https://www.omicsonline.org/open-access-pdfs/a-comprehensive-review-of-anxiety-disorders-understanding-diagnosis-and-treatment.pdf">
+                <h4>Understanding Anxiety Disorders</h4>
+                <div class="article-meta">
+                    <span>Clinical Neuropsychology: Open Access</span>
+                    <span> 2023</span>
+                </div>
+                <div class="article-content">
+                    <p>A comprehensive review of anxiety disorders reveals new insights into their neurobiological basis and effective treatment approaches. The study emphasizes the importance of cognitive-behavioral therapy and mindfulness-based interventions in managing anxiety symptoms.</p>
+                </div>
+                <div class="article-actions">
+                    <a href="https://www.omicsonline.org/open-access-pdfs/a-comprehensive-review-of-anxiety-disorders-understanding-diagnosis-and-treatment.pdf" class="article-source" target="_blank">Read Full Article</a>
+                    <button class="copy-to-journal" onclick="copyArticleToClipboard(this)">
+                        <i class="fas fa-copy"></i> Copy Article
+                    </button>
+                </div>
+            </div>
+
+            <div class="article-card" data-article-title="The Power of Mindfulness Meditation" data-article-content="This meta-analysis of 47 clinical trials found that mindfulness meditation programs can reduce symptoms of anxiety, depression, and pain. The research included 3,515 participants and showed moderate evidence of improved mental health outcomes." data-article-source="https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1809754">
+                <h4>The Power of Mindfulness Meditation</h4>
+                <div class="article-meta">
+                    <span>JAMA Internal Medicine</span>
+                    <span>August 7, 2023</span>
+                </div>
+                <div class="article-content">
+                    <p>This meta-analysis of 47 clinical trials found that mindfulness meditation programs can reduce symptoms of anxiety, depression, and pain. The research included 3,515 participants and showed moderate evidence of improved mental health outcomes.</p>
+                </div>
+                <div class="article-actions">
+                    <a href="https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1809754" class="article-source" target="_blank">Read Full Article</a>
+                    <button class="copy-to-journal" onclick="copyArticleToClipboard(this)">
+                        <i class="fas fa-copy"></i> Copy Article
+                    </button>
+                </div>
+            </div>
+
+            <div class="article-card" data-article-title="Sleep and Mental Health Connection" data-article-content="This longitudinal study demonstrates the bidirectional relationship between sleep quality and mental health. The findings suggest that improving sleep hygiene can significantly reduce symptoms of depression and anxiety, while mental health interventions can improve sleep patterns." data-article-source="https://www.sciencedirect.com/science/article/pii/S0168010223000871?via%3Dihub">
+                <h4>Sleep and Mental Health Connection</h4>
+                <div class="article-meta">
+                    <span>Sleep Medicine Reviews</span>
+                    <span>February 2025</span>
+                </div>
+                <div class="article-content">
+                    <p>This longitudinal study demonstrates the bidirectional relationship between sleep quality and mental health. The findings suggest that improving sleep hygiene can significantly reduce symptoms of depression and anxiety, while mental health interventions can improve sleep patterns.</p>
+                </div>
+                <div class="article-actions">
+                    <a href="https://www.sciencedirect.com/science/article/pii/S0168010223000871?via%3Dihub" class="article-source" target="_blank">Read Full Article</a>
+                    <button class="copy-to-journal" onclick="copyArticleToClipboard(this)">
+                        <i class="fas fa-copy"></i> Copy Article
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reflection Game Page -->
+        <div id="reflection-page" class="page">
+            <div class="article-header">
+                <button class="back-button" id="back-to-relax-3">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Psychological Reflection</h2>
+            </div>
+
+            <div class="reflection-container">
+                <p>Explore your thoughts and feelings through open-ended scenarios</p>
+
+                <div class="scenario-display" id="scenario-display">
+                    Press "Start Reflection" to begin...
+                </div>
+
+                <div class="timer-display" id="timer-display">05:00</div>
+
+                <button class="primary-button" id="start-reflection">Start Reflection</button>
+                <button class="secondary-button" id="stop-reflection" style="display: none;">End Session</button>
+
+                <textarea class="response-area" id="response-area" placeholder="Write your thoughts here..."></textarea>
+
+                <div class="response-actions">
+                    <button class="primary-button" id="save-reflection">Save to Journal</button>
+                    <button class="secondary-button" id="share-reflection">Share with SoonPsy</button>
+                </div>
+
+                <div class="quote-display" id="quote-display">
+                    "Between stimulus and response there is a space. In that space is our power to choose our response." - Viktor Frankl
+                </div>
+            </div>
+        </div>
+
+        <!-- Piano Page -->
+        <div id="piano-page" class="page">
+            <div class="article-header">
+                <button class="back-button" id="back-to-relax-2">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Interactive Piano</h2>
+            </div>
+
+            <div class="piano-container">
+                <p>Play the piano to relax and express your emotions</p>
+
+                <div class="piano">
+                    <div class="key" data-note="C">C</div>
+                    <div class="key black" data-note="C#">C#</div>
+                    <div class="key" data-note="D">D</div>
+                    <div class="key black" data-note="D#">D#</div>
+                    <div class="key" data-note="E">E</div>
+                    <div class="key" data-note="F">F</div>
+                    <div class="key black" data-note="F#">F#</div>
+                    <div class="key" data-note="G">G</div>
+                    <div class="key black" data-note="G#">G#</div>
+                    <div class="key" data-note="A">A</div>
+                    <div class="key black" data-note="A#">A#</div>
+                    <div class="key" data-note="B">B</div>
+                </div>
+
+                <div class="breathing-controls">
+                    <button class="secondary-button" onclick="stopPiano()">
+                        <i class="fas fa-stop"></i> Stop All Sounds
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relaxing Music Page -->
+        <div id="music-page" class="page">
+            <div class="article-header">
+                <button class="back-button" id="back-to-relax-4">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Relaxing Music</h2>
+            </div>
+
+            <div class="music-container">
+                <div class="music-track">
+                    <div class="track-title">Calming Piano Melodies</div>
+                    <div class="track-description">Soothing instrumental music to reduce stress and anxiety</div>
+
+                    <div class="audio-player">
+                        <button class="play-pause-btn" id="music-play-pause">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="music-progress"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button class="secondary-button" onclick="changeVolume(-0.1)">
+                            <i class="fas fa-volume-down"></i> Quieter
+                        </button>
+                        <button class="secondary-button" onclick="changeVolume(0.1)">
+                            <i class="fas fa-volume-up"></i> Louder
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article-card">
+                <h4>Music Therapy Benefits</h4>
+                <div class="article-content">
+                    <p>Research shows that listening to relaxing music can:</p>
+                    <ul style="padding-left: 20px; margin: 10px 0;">
+                        <li>Reduce cortisol levels by up to 25%</li>
+                        <li>Lower heart rate and blood pressure</li>
+                        <li>Improve sleep quality</li>
+                        <li>Decrease symptoms of anxiety and depression</li>
+                    </ul>
+                    <p>Try listening for at least 10 minutes daily for maximum benefits.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Positive Affirmations Page -->
+        <div id="affirmations-page" class="page">
+            <div class="article-header">
+                <button class="back-button" id="back-to-relax-5">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Positive Affirmations</h2>
+            </div>
+
+            <div class="meditation-container">
+                <p>Positive affirmations can help improve your mental health by reinforcing positive beliefs.</p>
+                <div id="affirmation-display" class="quote-display">
+                    Click "Generate Affirmation" to get started.
+                </div>
+                <button class="primary-button" id="generate-affirmation">Generate Affirmation</button>
+            </div>
+        </div>
+
+        <!-- 30-Minute Walk Page -->
+        <div id="walk-page" class="page">
+            <div class="article-header">
+                <button class="back-button" id="back-to-relax-6">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>30-Minute Walk</h2>
+            </div>
+
+            <div class="tracker-card">
+                <p>Walking for 30 minutes daily contributes to better mental health by reducing stress and improving mood.</p>
+                <div class="timer-display" id="walk-timer">30:00</div>
+                <div class="breathing-controls">
+                    <button class="primary-button" id="start-walk">Start Walk</button>
+                    <button class="secondary-button" id="stop-walk" style="display: none;">Stop</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Healthy Food Tracking Page -->
+        <div id="food-page" class="page">
+            <div class="article-header">
+                <button class="back-button" id="back-to-relax-7">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>Healthy Food Tracking</h2>
+            </div>
+
+            <div class="tracker-card">
+                <p>Tracking healthy food intake helps maintain good mental health by supporting brain function and energy levels.</p>
+                <input type="text" class="tracker-input" id="food-input" placeholder="Enter food item (e.g., salad, fruits)">
+                <button class="primary-button" id="log-food">Log Food</button>
+                <h4>Today's Healthy Foods</h4>
+                <ul id="food-list" style="list-style-type: disc; padding-left: 20px;"></ul>
+            </div>
+        </div>
+
+        <!-- Animal Companion Page -->
+        <div id="animal-page" class="page">
+            <h2 class="page-title">Animal Companion</h2>
+
+            <div class="pet-profile">
+                <div class="pet-avatar" id="pet-avatar">
+                    <i class="fas fa-paw"></i>
+                </div>
+                <h3 id="pet-name">Your Pet</h3>
+                <p id="pet-type">Add your pet's details</p>
+            </div>
+
+            <div class="pet-info">
+                <h4>Pet Information</h4>
+                <div class="pet-info-item">
+                    <span class="pet-info-label">Name:</span>
+                    <span class="pet-info-value" id="pet-info-name">Not set</span>
+                </div>
+                <div class="pet-info-item">
+                    <span class="pet-info-label">Type:</span>
+                    <span class="pet-info-value" id="pet-info-type">Not set</span>
+                </div>
+                <div class="pet-info-item">
+                    <span class="pet-info-label">Age:</span>
+                    <span class="pet-info-value" id="pet-info-age">Not set</span>
+                </div>
+                <div class="pet-info-item">
+                    <span class="pet-info-label">Breed:</span>
+                    <span class="pet-info-value" id="pet-info-breed">Not set</span>
+                </div>
+                <button class="primary-button" style="width: 100%; margin-top: 15px;" id="edit-pet-btn">Edit Pet Details</button>
+                <button class="secondary-button" id="share-pet-with-ai" style="width: 100%; margin-top: 10px;">Share Pet Data with SoonPsy</button>
+            </div>
+
+            <h3 class="section-title">Pet Health Tracking</h3>
+
+            <div class="tracker-card">
+                <h4>Sleep Tracking</h4>
+                <div class="tracker-stats">
+                    <div class="tracker-stat">
+                        <div class="tracker-value" id="pet-sleep-hours">0</div>
+                        <div class="tracker-label">Hours Today</div>
+                    </div>
+                    <div class="tracker-stat">
+                        <div class="tracker-value" id="pet-sleep-avg">0</div>
+                        <div class="tracker-label">Daily Average</div>
+                    </div>
+                </div>
+                <div class="tracker-form">
+                    <input type="number" class="tracker-input" id="pet-sleep-input" placeholder="Sleep hours today" min="0" max="24" step="0.5">
+                    <button class="primary-button" id="log-pet-sleep">Log Sleep</button>
+                </div>
+            </div>
+
+            <div class="tracker-card">
+                <h4>Exercise Tracking</h4>
+                <div class="tracker-stats">
+                    <div class="tracker-stat">
+                        <div class="tracker-value" id="pet-exercise-mins">0</div>
+                        <div class="tracker-label">Minutes Today</div>
+                    </div>
+                    <div class="tracker-stat">
+                        <div class="tracker-value" id="pet-exercise-avg">0</div>
+                        <div class="tracker-label">Daily Average</div>
+                    </div>
+                </div>
+                <div class="tracker-form">
+                    <input type="number" class="tracker-input" id="pet-exercise-input" placeholder="Exercise minutes today" min="0" max="300" step="5">
+                    <button class="primary-button" id="log-pet-exercise">Log Exercise</button>
+                </div>
+            </div>
+
+            <h3 class="section-title">Activities with Your Pet</h3>
+
+            <div class="activity-grid">
+                <div class="activity-card" id="walk-activity">
+                    <div class="activity-icon">
+                        <i class="fas fa-walking"></i>
+                    </div>
+                    <div class="activity-title">Go for a Walk</div>
+                </div>
+                <div class="activity-card" id="play-activity">
+                    <div class="activity-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div class="activity-title">Play Time</div>
+                </div>
+                <div class="activity-card" id="groom-activity">
+                    <div class="activity-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <div class="activity-title">Grooming</div>
+                </div>
+                <div class="activity-card" id="train-activity">
+                    <div class="activity-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="activity-title">Training</div>
+                </div>
+            </div>
+
+            <div class="pet-tips">
+                <h4>Benefits of Pets for Mental Health</h4>
+                <ul>
+                    <li>Reducing stress and anxiety levels</li>
+                    <li>Providing companionship and reducing loneliness</li>
+                    <li>Encouraging physical activity and exercise</li>
+                    <li>Providing routine and purpose to daily life</li>
+                    <li>Increasing opportunities for socialization</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-target="home-page">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" data-target="journal-page">
+            <i class="fas fa-book"></i>
+            <span>Journal</span>
+        </button>
+        <button class="nav-item" data-target="relaxation-page">
+            <i class="fas fa-spa"></i>
+            <span>Relax</span>
+        </button>
+        <button class="nav-item" data-target="animal-page">
+            <i class="fas fa-paw"></i>
+            <span>Pet</span>
+        </button>
+        <button class="nav-item" data-target="articles-page">
+            <i class="fas fa-newspaper"></i>
+            <span>Insights</span>
+        </button>
+    </nav>
+</div>
+
+<!-- Hidden Audio Elements -->
+<audio id="bg-music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="nature-sounds" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    // Groq API Configuration
+    const GROQ_API_KEY = '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';
+    const GROQ_MODEL = 'openai/gpt-oss-20b';
+    const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
+
+    // System Prompt for SoonPsy - Enhanced with Contextual Memory
+    function getSoonPsySystemPrompt(userContext = {}) {
+        const {
+            mood = 'Not specified',
+            sleepHours = 0,
+            exerciseMinutes = 0,
+            restMinutes = 0,
+            petSleepHours = 0,
+            gratitudeEntries = []
+        } = userContext;
+
+        let gratitudeContext = '';
+        if (gratitudeEntries.length > 0) {
+            const recentGratitude = gratitudeEntries.slice(-3).map(entry => 
+                `"${entry.content}" (${entry.date})`
+            ).join(', ');
+            gratitudeContext = `Recent gratitude entries: ${recentGratitude}`;
+        }
+
+        return `You are SoonPsy, an AI companion for mental health and well-being in the Soon platform. You provide scientifically accurate insights and supportive guidance grounded in psychology.
+
+**CURRENT USER CONTEXT:**
+- User's current mood: ${mood}
+- Sleep duration last night: ${sleepHours} hours
+- Exercise today: ${exerciseMinutes} minutes
+- Rest/break time today: ${restMinutes} minutes
+- Pet's sleep duration: ${petSleepHours} hours
+- ${gratitudeContext}
+
+**ANALYSIS APPROACH:**
+Analyze this data contextually to provide personalized psychological insights. Consider the correlations between sleep, exercise, rest, mood, and pet well-being. Use the gratitude entries to reinforce positive thinking patterns.
+
+**ROLE:** AI companion for mental health and well-being.
+**SCOPE:** Understand user queries, analyze mood tracking data, process journal entries, interpret pet companion data (including sleep tracking), analyze rest/break tracking data, and integrate gratitude journaling into psychological assessments, all within psychological well-being.
+
+**ABSOLUTE GUARDRAILS:**
+- NO DIAGNOSIS: Never diagnose any mental health condition, illness, or disorder.
+- NO MEDICAL ADVICE: Never offer medical, therapeutic, or pharmacological advice. Always refer to qualified professionals.
+- STRICT SCOPE: Only answer questions related to scientific psychology and general well-being. Politely decline out-of-scope questions (e.g., finance, specific medical treatments, legal advice) and suggest redirecting to psychological topics.
+
+**MANDATORY:** Every response MUST end with: "**Disclaimer:** *This information is provided for educational and supportive purposes only and should not be taken as medical, diagnostic, or therapeutic advice. Always consult with a qualified mental health professional for personalized guidance and treatment.*"
+
+**Citations:** Back all significant factual claims or advice with cited scientific sources. Use web search if needed to verify.
+
+**Feature Integration:**
+- Mood Tracking: Offer psychological insights related to the mood, analyze historical data if provided.
+- Journal: Analyze themes, emotions, patterns in shared entries.
+- Pet Companion: Provide insights on psychological correlations between pet well-being and user's mental state.
+- Rest/Break Tracking: Analyze rest patterns in relation to psychological well-being.
+- Gratitude Journal: Reinforce positive thinking patterns and discuss the psychological benefits of gratitude practice.
+
+**Response Style:** Keep responses empathetic, supportive, concise (200-400 words), and engaging. Reference the contextual data when providing insights.`;
+    }
+
+    // Wisdom quotes for notifications (unchanged)
+    const wisdomQuotes = [
+        "Behavior is shaped by its consequences. - B.F. Skinner (Behaviorism)",
+        "The greatest discovery of my generation is that a human being can alter his life by altering his attitudes. - William James (Cognitive)",
+        "Until you make the unconscious conscious, it will direct your life and you will call it fate. - Carl Jung (Analytical)",
+        "We are what we repeatedly do. Excellence, then, is not an act, but a habit. - Aristotle (Cognitive)",
+        "The mind is everything. What you think you become. - Buddha (Cognitive)",
+        "What we think, we become. - Buddha (Cognitive)",
+        "The unexamined life is not worth living. - Socrates (Cognitive)",
+        "The good life is a process, not a state of being. It is a direction, not a destination. - Carl Rogers (Humanistic)",
+        "Happiness is not something ready made. It comes from your own actions. - Dalai Lama (Cognitive)",
+        "Between stimulus and response there is a space. In that space is our power to choose our response. - Viktor Frankl (Behavioral)"
+    ];
+
+    // Psychological scenarios for reflection game (unchanged)
+    const reflectionScenarios = [
+        "What if you were in a situation where you felt extremely angry? How would you manage your emotions?",
+        "Imagine you made a serious mistake at work. How would you handle the consequences?",
+        "What would you do if you found yourself constantly worrying about the future?",
+        "How would you respond if someone you care about deeply disappointed you?",
+        "What if you were faced with a difficult ethical dilemma? How would you make your decision?",
+        "How would you cope with feelings of loneliness or isolation?",
+        "What if you achieved all your life goals? How would you find new meaning?",
+        "How would you handle a situation where you felt overwhelmed by responsibilities?",
+        "What would you do if you discovered a close friend was being dishonest with you?",
+        "How would you respond to criticism that you felt was unfair?"
+    ];
+
+    // Nature sounds (unchanged)
+    const natureSounds = {
+        birds: {
+            url: "https://media.blubrry.com/ambience_and_nature_sounds/content.blubrry.com/ambience_and_nature_sounds/Bird_chorus_at_sunrise_in_Danish_city_1_hour_.mp3",
+            bgImage: "https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+        },
+        waves: {
+            url: "https://media.blubrry.com/ambience_and_nature_sounds/content.blubrry.com/ambience_and_nature_sounds/Ambience_Calm_ocean_rock_beach.mp3",
+            bgImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+        }
+    };
+
+    // Piano notes (unchanged)
+    const pianoNotes = {
+        'C': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+        'C#': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+        'D': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+        'D#': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+        'E': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+        'F': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+        'F#': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
+        'G': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
+        'G#': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
+        'A': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
+        'A#': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3',
+        'B': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3'
+    };
+
+    // Pet types (unchanged)
+    const petTypes = {
+        dog: { icon: 'fas fa-dog', color: '#8e44ad' },
+        cat: { icon: 'fas fa-cat', color: '#3498db' },
+        bird: { icon: 'fas fa-dove', color: '#e74c3c' },
+        fish: { icon: 'fas fa-fish', color: '#3498db' },
+        rabbit: { icon: 'fas fa-paw', color: '#95a5a6' },
+        hamster: { icon: 'fas fa-paw', color: '#f39c12' },
+        other: { icon: 'fas fa-paw', color: '#2ecc71' }
+    };
+
+    // Positive affirmations (unchanged)
+    const positiveAffirmations = [
+        "I am worthy of love and respect.",
+        "I am capable of achieving my goals.",
+        "I choose to focus on what I can control.",
+        "I am grateful for the good in my life.",
+        "I am strong and resilient.",
+        "I deserve happiness and success.",
+        "I am confident in my abilities.",
+        "I am at peace with my past.",
+        "I embrace change and growth.",
+        "I am surrounded by positive energy."
+    ];
+
+    // DOM Elements (updated for new features)
+    const authBtn = document.getElementById('auth-btn');
+    const authModal = document.getElementById('auth-modal');
+    const closeModal = document.getElementById('close-modal');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const showSignupBtn = document.getElementById('show-signup');
+    const showLoginBtn = document.getElementById('show-login');
+    const loginBtn = document.getElementById('login-btn');
+    const signupBtn = document.getElementById('signup-btn');
+    const loginError = document.getElementById('login-error');
+    const signupError = document.getElementById('signup-error');
+    const moodNotification = document.getElementById('mood-notification');
+    const quoteNotification = document.getElementById('quote-notification');
+    const quoteText = document.getElementById('quote-text');
+    const moodOptions = document.querySelectorAll('.mood-option');
+    const saveJournalBtn = document.getElementById('save-journal');
+    const journalText = document.getElementById('journal-text');
+    const moodInput = document.getElementById('mood-input');
+    const journalCard = document.getElementById('journal-card');
+    const relaxationCard = document.getElementById('relaxation-card');
+    const articlesCard = document.getElementById('articles-card');
+    const animalCard = document.getElementById('animal-card');
+    const reflectionCard = document.getElementById('reflection-card');
+    const meditationCard = document.getElementById('meditation-card');
+    const natureCard = document.getElementById('nature-card');
+    const musicCard = document.getElementById('music-card');
+    const pianoCard = document.getElementById('piano-card');
+    const affirmationsCard = document.getElementById('affirmations-card');
+    const walkCard = document.getElementById('walk-card');
+    const foodCard = document.getElementById('food-card');
+    const backToRelaxBtn = document.getElementById('back-to-relax');
+    const startReflectionBtn = document.getElementById('start-reflection');
+    const stopReflectionBtn = document.getElementById('stop-reflection');
+    const scenarioDisplay = document.getElementById('scenario-display');
+    const timerDisplay = document.getElementById('timer-display');
+    const responseArea = document.getElementById('response-area');
+    const quoteDisplay = document.getElementById('quote-display');
+    const startMeditationBtn = document.getElementById('start-meditation');
+    const stopMeditationBtn = document.getElementById('stop-meditation');
+    const breathingInstruction = document.getElementById('breathing-instruction');
+    const circleText = document.getElementById('circle-text');
+    const aiResponse = document.getElementById('ai-response');
+    const aiInput = document.getElementById('ai-input');
+    const aiSendBtn = document.getElementById('ai-send');
+    const toggleMusicBtn = document.getElementById('toggle-music');
+    const toggleNatureBtn = document.getElementById('toggle-nature');
+    const bgMusic = document.getElementById('bg-music');
+    const journalHistory = document.getElementById('journal-history');
+    const saveReflectionBtn = document.getElementById('save-reflection');
+    const shareReflectionBtn = document.getElementById('share-reflection');
+    const pianoKeys = document.querySelectorAll('.key');
+    const musicPlayPauseBtn = document.getElementById('music-play-pause');
+    const musicProgress = document.getElementById('music-progress');
+
+    // Sleep and Exercise Tracking Elements (unchanged)
+    const sleepProgress = document.getElementById('sleep-progress');
+    const sleepHours = document.getElementById('sleep-hours');
+    const lastSleep = document.getElementById('last-sleep');
+    const logSleepBtn = document.getElementById('log-sleep');
+    const viewSleepHistoryBtn = document.getElementById('view-sleep-history');
+    const exerciseProgress = document.getElementById('exercise-progress');
+    const exerciseMins = document.getElementById('exercise-mins');
+    const todayExercise = document.getElementById('today-exercise');
+    const logExerciseBtn = document.getElementById('log-exercise');
+    const viewExerciseHistoryBtn = document.getElementById('view-exercise-history');
+
+    // Rest Tracking Elements
+    const restProgress = document.getElementById('rest-progress');
+    const restMins = document.getElementById('rest-mins');
+    const todayRest = document.getElementById('today-rest');
+    const restInput = document.getElementById('rest-input');
+    const logRestBtn = document.getElementById('log-rest');
+    const shareRestWithAI = document.getElementById('share-rest-with-ai');
+
+    // Animal Companion Elements (updated with share button)
+    const petAvatar = document.getElementById('pet-avatar');
+    const petName = document.getElementById('pet-name');
+    const petType = document.getElementById('pet-type');
+    const petInfoName = document.getElementById('pet-info-name');
+    const petInfoType = document.getElementById('pet-info-type');
+    const petInfoAge = document.getElementById('pet-info-age');
+    const petInfoBreed = document.getElementById('pet-info-breed');
+    const editPetBtn = document.getElementById('edit-pet-btn');
+    const sharePetWithAI = document.getElementById('share-pet-with-ai');
+    const petSleepHours = document.getElementById('pet-sleep-hours');
+    const petSleepAvg = document.getElementById('pet-sleep-avg');
+    const petSleepInput = document.getElementById('pet-sleep-input');
+    const logPetSleepBtn = document.getElementById('log-pet-sleep');
+    const petExerciseMins = document.getElementById('pet-exercise-mins');
+    const petExerciseAvg = document.getElementById('pet-exercise-avg');
+    const petExerciseInput = document.getElementById('pet-exercise-input');
+    const logPetExerciseBtn = document.getElementById('log-pet-exercise');
+    const walkActivity = document.getElementById('walk-activity');
+    const playActivity = document.getElementById('play-activity');
+    const groomActivity = document.getElementById('groom-activity');
+    const trainActivity = document.getElementById('train-activity');
+
+    // New Elements for Gratitude Feature
+    const gratitudeInput = document.getElementById('gratitude-input');
+    const saveGratitudeBtn = document.getElementById('save-gratitude');
+    const shareGratitudeWithAI = document.getElementById('share-gratitude-with-ai');
+    const gratitudeCount = document.getElementById('gratitude-count');
+    const gratitudeTotal = document.getElementById('gratitude-total');
+
+    // Existing Elements
+    const shareMoodWithAI = document.getElementById('share-mood-with-ai');
+    const shareJournalWithAI = document.getElementById('share-journal-with-ai');
+
+    // App State (updated with gratitudeData)
+    let currentUser = null;
+    let isLoggedIn = false;
+    let isMeditating = false;
+    let meditationInterval;
+    let breathingPhase = 'inhale';
+    let circleSize = 100;
+    let reflectionInterval;
+    let reflectionTime = 5 * 60; // 5 minutes in seconds
+    let isReflectionActive = false;
+    let musicEnabled = false;
+    let natureEnabled = false;
+    let currentAudio = null;
+    let playingNotes = {};
+    let relaxingMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+    let isMusicPlaying = false;
+
+    // Data Arrays (added gratitudeData)
+    let sleepData = [];
+    let exerciseData = [];
+    let restData = [];
+    let gratitudeData = []; // New: Store gratitude entries
+    let petData = {
+        name: '',
+        type: '',
+        age: '',
+        breed: '',
+        sleep: [],
+        exercise: []
+    };
+
+    // Walk and Food (unchanged)
+    let walkTime = 30 * 60; // 30 minutes in seconds
+    let walkInterval;
+    let isWalking = false;
+    let foodData = []; // Today's healthy foods
+
+    // Current mood for sharing
+    let currentMood = '';
+
+    // Initialize the app
+    function initApp() {
+        // Load data from localStorage
+        loadUserData();
+
+        // Initialize authentication modal
+        setupAuthModal();
+
+        // Set up auth state listener
+        updateAuthUI();
+
+        // Show notifications
+        showMoodNotification();
+
+        // Mood selection
+        setupMoodTracking();
+
+        // Navigation
+        setupNavigation();
+
+        // Journal functionality
+        setupJournal();
+
+        // Gratitude Feature
+        setupGratitude();
+
+        // Reflection game
+        setupReflectionGame();
+
+        // Meditation
+        setupMeditation();
+
+        // SoonPsy AI Assistant
+        setupSoonPsyAI();
+
+        // Sound controls
+        setupSoundControls();
+
+        // Piano
+        setupPiano();
+
+        // Music player
+        setupMusicPlayer();
+
+        // Sleep, Exercise, and Rest Tracking
+        setupSleepExerciseTracking();
+        setupRestTracking();
+
+        // Animal Companion
+        setupAnimalCompanion();
+
+        // Positive Affirmations, Walk, Food (unchanged)
+        setupPositiveAffirmations();
+        setupWalkTracker();
+        setupFoodTracking();
+
+        // Update progress circles
+        updateProgressCircles();
+
+        // Register service worker for PWA
+        registerServiceWorker();
+
+        // Update gratitude stats
+        updateGratitudeStats();
+    }
+
+    // Load User Data (updated for gratitudeData)
+    function loadUserData() {
+        const userData = localStorage.getItem('soon_user');
+        if (userData) {
+            currentUser = JSON.parse(userData);
+            isLoggedIn = true;
+        }
+
+        const savedSleepData = localStorage.getItem('soon_sleep');
+        if (savedSleepData) {
+            sleepData = JSON.parse(savedSleepData);
+        }
+
+        const savedExerciseData = localStorage.getItem('soon_exercise');
+        if (savedExerciseData) {
+            exerciseData = JSON.parse(savedExerciseData);
+        }
+
+        const savedRestData = localStorage.getItem('soon_rest');
+        if (savedRestData) {
+            restData = JSON.parse(savedRestData);
+        }
+
+        const savedGratitudeData = localStorage.getItem('soon_gratitude');
+        if (savedGratitudeData) {
+            gratitudeData = JSON.parse(savedGratitudeData);
+        }
+
+        const savedPetData = localStorage.getItem('soon_pet');
+        if (savedPetData) {
+            petData = JSON.parse(savedPetData);
+            updatePetUI();
+        }
+
+        const lastMood = localStorage.getItem('lastMood');
+        if (lastMood) {
+            currentMood = lastMood;
+        }
+    }
+
+    function saveUserData() {
+        if (currentUser) {
+            localStorage.setItem('soon_user', JSON.stringify(currentUser));
+        }
+        localStorage.setItem('soon_sleep', JSON.stringify(sleepData));
+        localStorage.setItem('soon_exercise', JSON.stringify(exerciseData));
+        localStorage.setItem('soon_rest', JSON.stringify(restData));
+        localStorage.setItem('soon_gratitude', JSON.stringify(gratitudeData));
+        localStorage.setItem('soon_pet', JSON.stringify(petData));
+        localStorage.setItem('lastMood', currentMood);
+    }
+
+    // Register Service Worker for PWA
+    function registerServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('Service Worker registered successfully:', registration);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    }
+
+    // Setup Auth Modal (updated branding)
+    function setupAuthModal() {
+        authBtn.addEventListener('click', function() {
+            if (isLoggedIn) {
+                isLoggedIn = false;
+                currentUser = null;
+                showTemporaryMessage("You've been logged out");
+                updateAuthUI();
+                saveUserData();
+            } else {
+                authModal.style.display = 'flex';
+                showLoginForm();
+            }
+        });
+
+        closeModal.addEventListener('click', function() {
+            authModal.style.display = 'none';
+        });
+
+        showSignupBtn.addEventListener('click', showSignupForm);
+        showLoginBtn.addEventListener('click', showLoginForm);
+
+        loginBtn.addEventListener('click', function() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                loginError.textContent = "Please enter both email and password";
+                return;
+            }
+
+            isLoggedIn = true;
+            currentUser = {
+                email: email,
+                name: email.split('@')[0],
+                joined: new Date().toISOString()
+            };
+
+            authModal.style.display = 'none';
+            showTemporaryMessage("Welcome to Soon!");
+            updateAuthUI();
+            saveUserData();
+        });
+
+        signupBtn.addEventListener('click', function() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirm = document.getElementById('signup-confirm').value;
+
+            if (!name || !email || !password || !confirm) {
+                signupError.textContent = "Please fill in all fields";
+                return;
+            }
+
+            if (password !== confirm) {
+                signupError.textContent = "Passwords do not match";
+                return;
+            }
+
+            isLoggedIn = true;
+            currentUser = {
+                email: email,
+                name: name,
+                joined: new Date().toISOString()
+            };
+
+            authModal.style.display = 'none';
+            showTemporaryMessage("Account created successfully!");
+            updateAuthUI();
+            saveUserData();
+        });
+    }
+
+    function showLoginForm() {
+        loginForm.classList.add('active');
+        signupForm.classList.remove('active');
+        loginError.textContent = "";
+    }
+
+    function showSignupForm() {
+        loginForm.classList.remove('active');
+        signupForm.classList.add('active');
+        signupError.textContent = "";
+    }
+
+    function updateAuthUI() {
+        // Removed user display name as per branding change
+    }
+
+    // Setup Mood Tracking (updated to set currentMood and share option)
+    function setupMoodTracking() {
+        moodOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                moodOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+
+                moodNotification.classList.remove('show');
+
+                currentMood = this.dataset.mood;
+                const moodLabel = this.querySelector('.mood-label').textContent;
+                showTemporaryMessage(`Mood recorded: ${moodLabel}`);
+
+                localStorage.setItem('lastMood', moodLabel);
+
+                // Optional: Auto-share with AI after selection
+                // shareMoodWithSoonPsy();
+            });
+        });
+
+        const lastMood = localStorage.getItem('lastMood');
+        if (lastMood) {
+            moodOptions.forEach(option => {
+                if (option.querySelector('.mood-label').textContent.toLowerCase() === lastMood.toLowerCase()) {
+                    option.classList.add('selected');
+                    currentMood = option.dataset.mood;
+                }
+            });
+        }
+
+        shareMoodWithAI.addEventListener('click', shareMoodWithSoonPsy);
+    }
+
+    function shareMoodWithSoonPsy() {
+        if (!currentMood) {
+            showTemporaryMessage("Please select a mood first.");
+            return;
+        }
+        const userContext = getUserContextData();
+        const context = `User's current mood: ${currentMood}. Historical moods: [load from localStorage if needed]. Provide psychological insights based on current context: ${JSON.stringify(userContext)}.`;
+        sendToSoonPsy(context);
+    }
+
+    // Setup Gratitude Feature
+    function setupGratitude() {
+        saveGratitudeBtn.addEventListener('click', function() {
+            const content = gratitudeInput.value.trim();
+            if (!content) {
+                showTemporaryMessage("Please write something you're grateful for");
+                return;
+            }
+
+            const entry = {
+                date: new Date().toISOString(),
+                content: content
+            };
+
+            gratitudeData.push(entry);
+            gratitudeInput.value = '';
+            updateGratitudeStats();
+            saveUserData();
+            showTemporaryMessage("Gratitude entry saved successfully!");
+        });
+
+        shareGratitudeWithAI.addEventListener('click', shareGratitudeWithSoonPsy);
+    }
+
+    function updateGratitudeStats() {
+        const today = new Date();
+        const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+        const weeklyCount = gratitudeData.filter(entry => new Date(entry.date) >= startOfWeek).length;
+        
+        gratitudeCount.textContent = weeklyCount;
+        gratitudeTotal.textContent = gratitudeData.length;
+    }
+
+    function shareGratitudeWithSoonPsy() {
+        const latestEntry = gratitudeInput.value.trim() || 'No current gratitude entry. Please write one.';
+        const recentEntries = gratitudeData.slice(-3).map(entry => 
+            `${new Date(entry.date).toLocaleDateString()}: "${entry.content}"`
+        ).join('; ');
+        
+        const context = `User shared gratitude: "${latestEntry}". Recent gratitude entries: ${recentEntries}. Discuss the psychological benefits of gratitude and reinforce positive thinking patterns.`;
+        sendToSoonPsy(context);
+    }
+
+    // Setup Rest Tracking
+    function setupRestTracking() {
+        logRestBtn.addEventListener('click', function() {
+            const minutes = parseInt(restInput.value);
+            if (!isNaN(minutes) && minutes >= 0 && minutes <= 1440) {
+                logRest(minutes);
+                restInput.value = '';
+                showTemporaryMessage(`Logged ${minutes} minutes of rest`);
+            } else {
+                showTemporaryMessage("Please enter a valid number of minutes (0-1440)");
+            }
+        });
+
+        shareRestWithAI.addEventListener('click', shareRestWithSoonPsy);
+    }
+
+    function logRest(minutes) {
+        restData.push({
+            date: new Date().toISOString(),
+            minutes: minutes
+        });
+
+        const today = new Date().toDateString();
+        const todayRestTotal = restData.filter(entry => new Date(entry.date).toDateString() === today)
+            .reduce((total, entry) => total + entry.minutes, 0);
+        todayRest.textContent = `${todayRestTotal} minutes`;
+
+        updateRestProgress();
+        saveUserData();
+    }
+
+    function updateRestProgress() {
+        const restGoal = 60; // 60 minutes goal for rest
+        const today = new Date().toDateString();
+        const todayRestTotal = restData.filter(entry => new Date(entry.date).toDateString() === today)
+            .reduce((total, entry) => total + entry.minutes, 0);
+        const restPercent = Math.min(todayRestTotal / restGoal, 1);
+        const circumference = 251.2;
+        restProgress.style.strokeDasharray = `${circumference * restPercent} ${circumference * (1 - restPercent)}`;
+        restMins.textContent = `${todayRestTotal}m`;
+    }
+
+    function shareRestWithSoonPsy() {
+        const today = new Date().toDateString();
+        const todayRestData = restData.filter(entry => new Date(entry.date).toDateString() === today)
+            .map(entry => entry.minutes).join(', ');
+        const userContext = getUserContextData();
+        const context = `User's rest data for today: ${todayRestData} minutes. Current context: ${JSON.stringify(userContext)}. Analyze rest patterns in relation to psychological well-being.`;
+        sendToSoonPsy(context);
+    }
+
+    // Setup Journal (updated with share button)
+    function setupJournal() {
+        saveJournalBtn.addEventListener('click', saveJournalEntry);
+        shareJournalWithAI.addEventListener('click', shareJournalWithSoonPsy);
+    }
+
+    function saveJournalEntry() {
+        const content = journalText.value.trim();
+        const mood = moodInput.value.trim();
+
+        if (!content) {
+            showTemporaryMessage("Please write something in your journal entry");
+            return;
+        }
+
+        showTemporaryMessage("Journal entry saved successfully!");
+        journalText.value = '';
+        moodInput.value = '';
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const moodHtml = mood ?
+            `<span class="journal-mood">${mood}</span>` : '';
+
+        const entryHtml = `
+            <div class="journal-entry-card">
+                <h4>${dateStr}</h4>
+                ${moodHtml}
+                <div class="journal-content">${content}</div>
+                <div class="journal-actions">
+                    <button class="journal-share-btn" onclick="shareJournalEntryWithSoonPsy('${content.replace(/'/g, "\\'")}', '${mood}')">
+                        <i class="fas fa-share"></i> Discuss with SoonPsy
+                    </button>
+                </div>
+            </div>
+        `;
+
+        if (journalHistory.innerHTML.includes('No journal entries yet')) {
+            journalHistory.innerHTML = entryHtml;
+        } else {
+            journalHistory.innerHTML = entryHtml + journalHistory.innerHTML;
+        }
+
+        const journalEntries = JSON.parse(localStorage.getItem('soon_journal') || '[]');
+        journalEntries.unshift({
+            date: now.toISOString(),
+            content: content,
+            mood: mood
+        });
+        localStorage.setItem('soon_journal', JSON.stringify(journalEntries));
+    }
+
+    function loadJournalHistory() {
+        const journalEntries = JSON.parse(localStorage.getItem('soon_journal') || '[]');
+
+        if (journalEntries.length === 0) {
+            journalHistory.innerHTML = '<p style="text-align: center; color: var(--text-light);">No journal entries yet</p>';
+            return;
+        }
+
+        journalHistory.innerHTML = '';
+        journalEntries.forEach(entry => {
+            const date = new Date(entry.date);
+            const dateStr = date.toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const moodHtml = entry.mood ?
+                `<span class="journal-mood">${entry.mood}</span>` : '';
+
+            const entryHtml = `
+                <div class="journal-entry-card">
+                    <h4>${dateStr}</h4>
+                    ${moodHtml}
+                    <div class="journal-content">${entry.content}</div>
+                    <div class="journal-actions">
+                        <button class="journal-share-btn" onclick="shareJournalEntryWithSoonPsy('${entry.content.replace(/'/g, "\\'")}', '${entry.mood}')">
+                            <i class="fas fa-share"></i> Discuss with SoonPsy
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            journalHistory.innerHTML += entryHtml;
+        });
+    }
+
+    function shareJournalWithSoonPsy() {
+        const latestEntry = journalText.value.trim() || 'No current entry. Please write one.';
+        shareJournalEntryWithSoonPsy(latestEntry, moodInput.value);
+    }
+
+    function shareJournalEntryWithSoonPsy(content, mood) {
+        const userContext = getUserContextData();
+        const context = `User shared journal entry: "${content}". Mood: ${mood || 'Not specified'}. Current context: ${JSON.stringify(userContext)}. Analyze themes, emotions, and patterns from a psychological perspective.`;
+        sendToSoonPsy(context);
+    }
+
+    // Setup Animal Companion (updated with share)
+    function setupAnimalCompanion() {
+        editPetBtn.addEventListener('click', function() {
+            const name = prompt("Enter your pet's name:", petData.name || "");
+            const type = prompt("Enter your pet's type (dog, cat, bird, etc.):", petData.type || "");
+            const age = prompt("Enter your pet's age:", petData.age || "");
+            const breed = prompt("Enter your pet's breed:", petData.breed || "");
+
+            if (name !== null) petData.name = name;
+            if (type !== null) petData.type = type;
+            if (age !== null) petData.age = age;
+            if (breed !== null) petData.breed = breed;
+
+            updatePetUI();
+            saveUserData();
+        });
+
+        logPetSleepBtn.addEventListener('click', function() {
+            const hours = parseFloat(petSleepInput.value);
+            if (!isNaN(hours) && hours >= 0 && hours <= 24) {
+                logPetSleep(hours);
+                petSleepInput.value = "";
+                showTemporaryMessage(`Logged ${hours} hours of sleep for ${petData.name || 'your pet'}`);
+            } else {
+                showTemporaryMessage("Please enter a valid number between 0 and 24");
+            }
+        });
+
+        logPetExerciseBtn.addEventListener('click', function() {
+            const minutes = parseInt(petExerciseInput.value);
+            if (!isNaN(minutes) && minutes >= 0 && minutes <= 300) {
+                logPetExercise(minutes);
+                petExerciseInput.value = "";
+                showTemporaryMessage(`Logged ${minutes} minutes of exercise for ${petData.name || 'your pet'}`);
+            } else {
+                showTemporaryMessage("Please enter a valid number between 0 and 300");
+            }
+        });
+
+        walkActivity.addEventListener('click', function() {
+            showTemporaryMessage(`Great! Taking ${petData.name || 'your pet'} for a walk is excellent for both of you!`);
+            logPetExercise(15);
+        });
+
+        playActivity.addEventListener('click', function() {
+            showTemporaryMessage(`Playing with ${petData.name || 'your pet'} is a wonderful way to bond and have fun!`);
+            logPetExercise(10);
+        });
+
+        groomActivity.addEventListener('click', function() {
+            showTemporaryMessage(`Grooming ${petData.name || 'your pet'} helps with bonding and keeps them healthy!`);
+        });
+
+        trainActivity.addEventListener('click', function() {
+            showTemporaryMessage(`Training ${petData.name || 'your pet'} is great for mental stimulation and bonding!`);
+            logPetExercise(5);
+        });
+
+        sharePetWithAI.addEventListener('click', sharePetWithSoonPsy);
+    }
+
+    function updatePetUI() {
+        let petIcon = 'fas fa-paw';
+        let petColor = '#2DCE89';
+
+        if (petData.type && petTypes[petData.type.toLowerCase()]) {
+            const typeInfo = petTypes[petData.type.toLowerCase()];
+            petIcon = typeInfo.icon;
+            petColor = typeInfo.color;
+        }
+
+        petAvatar.innerHTML = `<i class="${petIcon}"></i>`;
+        petAvatar.style.background = `linear-gradient(135deg, ${petColor}, ${petColor}dd)`;
+
+        if (petData.name) {
+            petName.textContent = petData.name;
+            petInfoName.textContent = petData.name;
+        } else {
+            petName.textContent = "Your Pet";
+            petInfoName.textContent = "Not set";
+        }
+
+        if (petData.type) {
+            petType.textContent = petData.type;
+            petInfoType.textContent = petData.type;
+        } else {
+            petType.textContent = "Add your pet's details";
+            petInfoType.textContent = "Not set";
+        }
+
+        petInfoAge.textContent = petData.age || "Not set";
+        petInfoBreed.textContent = petData.breed || "Not set";
+
+        updatePetStats();
+    }
+
+    function updatePetStats() {
+        const today = new Date().toDateString();
+        const todaySleep = petData.sleep.filter(entry => new Date(entry.date).toDateString() === today)
+            .reduce((total, entry) => total + entry.hours, 0);
+        const todayExercise = petData.exercise.filter(entry => new Date(entry.date).toDateString() === today)
+            .reduce((total, entry) => total + entry.minutes, 0);
+
+        const sleepAvg = petData.sleep.length > 0
+            ? petData.sleep.reduce((total, entry) => total + entry.hours, 0) / petData.sleep.length
+            : 0;
+        const exerciseAvg = petData.exercise.length > 0
+            ? petData.exercise.reduce((total, entry) => total + entry.minutes, 0) / petData.exercise.length
+            : 0;
+
+        petSleepHours.textContent = todaySleep.toFixed(1);
+        petSleepAvg.textContent = sleepAvg.toFixed(1);
+        petExerciseMins.textContent = todayExercise;
+        petExerciseAvg.textContent = exerciseAvg.toFixed(0);
+    }
+
+    function logPetSleep(hours) {
+        petData.sleep.push({
+            date: new Date().toISOString(),
+            hours: hours
+        });
+        updatePetStats();
+        saveUserData();
+    }
+
+    function logPetExercise(minutes) {
+        petData.exercise.push({
+            date: new Date().toISOString(),
+            minutes: minutes
+        });
+        updatePetStats();
+        saveUserData();
+    }
+
+    function sharePetWithSoonPsy() {
+        const recentSleep = petData.sleep.slice(-3).map(e => `${new Date(e.date).toLocaleDateString()}: ${e.hours}h`).join('; ');
+        const recentExercise = petData.exercise.slice(-3).map(e => `${new Date(e.date).toLocaleDateString()}: ${e.minutes}m`).join('; ');
+        const userContext = getUserContextData();
+        
+        const petContext = `Pet name: ${petData.name}, type: ${petData.type}, age: ${petData.age}, breed: ${petData.breed}. Recent sleep: ${recentSleep}. Recent exercise: ${recentExercise}. Current user context: ${JSON.stringify(userContext)}. Provide insights on psychological correlations between pet well-being and user's mental state.`;
+        sendToSoonPsy(petContext);
+    }
+
+    // Sleep and Exercise Logging (unchanged, but keys updated to 'soon_')
+    function logSleep(hours) {
+        sleepData.push({
+            date: new Date().toISOString(),
+            hours: hours
+        });
+
+        lastSleep.textContent = `${hours} hours`;
+        updateProgressCircles();
+        saveUserData();
+    }
+
+    function logExercise(minutes) {
+        exerciseData.push({
+            date: new Date().toISOString(),
+            minutes: minutes
+        });
+
+        const today = new Date().toDateString();
+        const todayExerciseTotal = exerciseData.filter(entry => new Date(entry.date).toDateString() === today)
+            .reduce((total, entry) => total + entry.minutes, 0);
+        todayExercise.textContent = `${todayExerciseTotal} minutes`;
+        updateProgressCircles();
+        saveUserData();
+    }
+
+    function updateProgressCircles() {
+        // Sleep
+        const sleepGoal = 8;
+        const lastSleepEntry = sleepData[sleepData.length - 1];
+        const sleepHours = lastSleepEntry ? lastSleepEntry.hours : 0;
+        const sleepPercent = Math.min(sleepHours / sleepGoal, 1);
+        const circumference = 251.2;
+        sleepProgress.style.strokeDasharray = `${circumference * sleepPercent} ${circumference * (1 - sleepPercent)}`;
+        sleepHours.textContent = `${sleepHours}h`;
+
+        // Exercise
+        const exerciseGoal = 30;
+        const today = new Date().toDateString();
+        const todayExerciseTotal = exerciseData.filter(entry => new Date(entry.date).toDateString() === today)
+            .reduce((total, entry) => total + entry.minutes, 0);
+        const exercisePercent = Math.min(todayExerciseTotal / exerciseGoal, 1);
+        exerciseProgress.style.strokeDasharray = `${circumference * exercisePercent} ${circumference * (1 - exercisePercent)}`;
+        exerciseMins.textContent = `${todayExerciseTotal}m`;
+
+        // Rest (new)
+        updateRestProgress();
+    }
+
+    // Setup Sleep/Exercise (updated keys)
+    function setupSleepExerciseTracking() {
+        logSleepBtn.addEventListener('click', function() {
+            const hours = parseFloat(prompt("How many hours did you sleep last night?"));
+            if (!isNaN(hours) && hours >= 0 && hours <= 24) {
+                logSleep(hours);
+                showTemporaryMessage(`Logged ${hours} hours of sleep`);
+            } else {
+                showTemporaryMessage("Please enter a valid number between 0 and 24");
+            }
+        });
+
+        logExerciseBtn.addEventListener('click', function() {
+            const minutes = parseInt(prompt("How many minutes did you exercise today?"));
+            if (!isNaN(minutes) && minutes >= 0 && minutes <= 300) {
+                logExercise(minutes);
+                showTemporaryMessage(`Logged ${minutes} minutes of exercise`);
+            } else {
+                showTemporaryMessage("Please enter a valid number between 0 and 300");
+            }
+        });
+
+        viewSleepHistoryBtn.addEventListener('click', function() {
+            showTemporaryMessage("Sleep history feature coming soon!");
+        });
+
+        viewExerciseHistoryBtn.addEventListener('click', function() {
+            showTemporaryMessage("Exercise history feature coming soon!");
+        });
+    }
+
+    // SoonPsy AI Setup with Groq API
+    function setupSoonPsyAI() {
+        aiSendBtn.addEventListener('click', processSoonPsyInput);
+        aiInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processSoonPsyInput();
+            }
+        });
+    }
+
+    async function processSoonPsyInput() {
+        const input = aiInput.value.trim();
+        if (!input) return;
+
+        addUserMessage(input);
+        aiInput.value = '';
+
+        showTypingIndicator();
+
+        try {
+            const response = await sendToSoonPsy(input);
+            hideTypingIndicator();
+            showSoonPsyResponse(response);
+        } catch (error) {
+            hideTypingIndicator();
+            showSoonPsyResponse("I'm sorry, there was an error processing your request. Please try again. Remember to consult a professional for personalized advice.");
+        }
+    }
+
+    async function sendToSoonPsy(userMessage, context = '') {
+        const fullPrompt = context ? `${userMessage}\n\nContext: ${context}` : userMessage;
+        
+        const userContext = getUserContextData();
+        const systemPrompt = getSoonPsySystemPrompt(userContext);
+
+        const payload = {
+            messages: [
+                {
+                    role: "system",
+                    content: systemPrompt
+                },
+                {
+                    role: "user",
+                    content: fullPrompt
+                }
+            ],
+            model: GROQ_MODEL,
+            temperature: 0.7,
+            max_tokens: 1024
+        };
+
+        const response = await fetch(GROQ_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${GROQ_API_KEY}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+    }
+
+    // Get User Context Data for AI Analysis
+    function getUserContextData() {
+        const today = new Date().toDateString();
+        
+        // Get today's sleep data
+        const todaySleep = sleepData.filter(entry => new Date(entry.date).toDateString() === today);
+        const sleepHours = todaySleep.length > 0 ? todaySleep[todaySleep.length - 1].hours : 0;
+
+        // Get today's exercise data
+        const todayExercise = exerciseData.filter(entry => new Date(entry.date).toDateString() === today);
+        const exerciseMinutes = todayExercise.reduce((total, entry) => total + entry.minutes, 0);
+
+        // Get today's rest data
+        const todayRest = restData.filter(entry => new Date(entry.date).toDateString() === today);
+        const restMinutes = todayRest.reduce((total, entry) => total + entry.minutes, 0);
+
+        // Get pet's sleep data
+        const todayPetSleep = petData.sleep.filter(entry => new Date(entry.date).toDateString() === today);
+        const petSleepHours = todayPetSleep.length > 0 ? todayPetSleep[todayPetSleep.length - 1].hours : 0;
+
+        // Get recent gratitude entries
+        const recentGratitude = gratitudeData.slice(-5);
+
+        return {
+            mood: currentMood || 'Not specified',
+            sleepHours,
+            exerciseMinutes,
+            restMinutes,
+            petSleepHours,
+            gratitudeEntries: recentGratitude
+        };
+    }
+
+    function addUserMessage(message) {
+        const messageElement = document.createElement('div');
+        messageElement.className = 'user-message';
+        messageElement.innerHTML = message;
+        aiResponse.appendChild(messageElement);
+        aiResponse.scrollTop = aiResponse.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        const typingElement = document.createElement('div');
+        typingElement.className = 'typing-indicator';
+        typingElement.innerHTML = `
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        `;
+        aiResponse.appendChild(typingElement);
+        aiResponse.scrollTop = aiResponse.scrollHeight;
+    }
+
+    function hideTypingIndicator() {
+        const typing = aiResponse.querySelector('.typing-indicator');
+        if (typing) typing.remove();
+    }
+
+    function showSoonPsyResponse(message) {
+        const messageElement = document.createElement('div');
+        messageElement.className = 'ai-message';
+        messageElement.innerHTML = message.replace(/\*\*Disclaimer:\*\* \*(.*?)\*/g, '<div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107; font-style: italic; color: #856404;">**Disclaimer:** *$1*</div>');
+        aiResponse.appendChild(messageElement);
+        aiResponse.scrollTop = aiResponse.scrollHeight;
+    }
+
+    // Bug Fix: Copy Article to Clipboard
+    async function copyArticleToClipboard(button) {
+        const card = button.closest('.article-card');
+        const title = card.dataset.articleTitle;
+        const content = card.dataset.articleContent;
+        const source = card.dataset.articleSource;
+        const textToCopy = `Title: ${title}\n\nContent: ${content}\n\nSource: ${source}`;
+
+        try {
+            await navigator.clipboard.writeText(textToCopy);
+            showTemporaryMessage("Article copied to clipboard!");
+        } catch (err) {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            showTemporaryMessage("Article copied to clipboard!");
+        }
+    }
+
+    // Notifications and Other Setups (unchanged except keys)
+    function showMoodNotification() {
+        setTimeout(() => {
+            moodNotification.classList.add('show');
+            setTimeout(() => {
+                moodNotification.classList.remove('show');
+                showQuoteNotification();
+            }, 5000);
+        }, 3000);
+    }
+
+    function showQuoteNotification() {
+        const randomQuote = wisdomQuotes[Math.floor(Math.random() * wisdomQuotes.length)];
+        quoteText.textContent = `"${randomQuote}"`;
+        quoteNotification.classList.add('show');
+        setTimeout(() => {
+            quoteNotification.classList.remove('show');
+        }, 8000);
+        setTimeout(showQuoteNotification, 60000);
+    }
+
+    function showTemporaryMessage(message) {
+        const messageEl = document.createElement('div');
+        messageEl.className = 'notification';
+        messageEl.innerHTML = `
+            <div class="notification-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="notification-content">
+                <p>${message}</p>
+            </div>
+        `;
+        document.body.appendChild(messageEl);
+        setTimeout(() => messageEl.classList.add('show'), 100);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 500);
+        }, 3000);
+    }
+
+    // Navigation and Other Functions (unchanged, with updated keys where necessary)
+    function setupNavigation() {
+        journalCard.addEventListener('click', function() {
+            navigateToPage('journal-page');
+            loadJournalHistory();
+        });
+
+        relaxationCard.addEventListener('click', function() {
+            navigateToPage('relaxation-page');
+        });
+
+        articlesCard.addEventListener('click', function() {
+            navigateToPage('articles-page');
+        });
+
+        animalCard.addEventListener('click', function() {
+            navigateToPage('animal-page');
+        });
+
+        reflectionCard.addEventListener('click', function() {
+            navigateToPage('reflection-page');
+            document.querySelector('.bottom-nav').style.display = 'none';
+        });
+
+        meditationCard.addEventListener('click', function() {
+            navigateToPage('meditation-page');
+            document.querySelector('.bottom-nav').style.display = 'none';
+        });
+
+        natureCard.addEventListener('click', function() {
+            navigateToPage('nature-page');
+            document.querySelector('.bottom-nav').style.display = 'none';
+        });
+
+        musicCard.addEventListener('click', function() {
+            navigateToPage('music-page');
+            document.querySelector('.bottom-nav').style.display = 'none';
+        });
+
+        pianoCard.addEventListener('click', function() {
+            navigateToPage('piano-page');
+            document.querySelector('.bottom-nav').style.display = 'none';
+        });
+
+        affirmationsCard.addEventListener('click', function() {
+            navigateToPage('affirmations-page');
+            document.querySelector('.bottom-nav').style.display = 'none';
+        });
+
+        walkCard.addEventListener('click', function() {
+            navigateToPage('walk-page');
+            document.querySelector('.bottom-nav').style.display = 'none';
+        });
+
+        foodCard.addEventListener('click', function() {
+            navigateToPage('food-page');
+            document.querySelector('.bottom-nav').style.display = 'none';
+        });
+
+        backToRelaxBtn.addEventListener('click', navigateToRelaxation);
+
+        [1,2,3,4,5,6,7].forEach(i => {
+            const btn = document.getElementById(`back-to-relax-${i}`);
+            if (btn) btn.addEventListener('click', navigateToRelaxation);
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                if (!targetId) return;
+
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+
+                navigateToPage(targetId);
+
+                if (targetId === 'journal-page') {
+                    loadJournalHistory();
+                }
+            });
+        });
+    }
+
+    function navigateToPage(pageId) {
+        document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        document.querySelector('.bottom-nav').style.display = 'flex';
+    }
+
+    function navigateToRelaxation() {
+        navigateToPage('relaxation-page');
+        stopMeditation();
+        stopReflection();
+        stopSound();
+        stopWalk();
+    }
+
+    // Reflection, Meditation, Piano, Music, etc. (unchanged)
+    function setupReflectionGame() {
+        startReflectionBtn.addEventListener('click', startReflection);
+        stopReflectionBtn.addEventListener('click', stopReflection);
+        saveReflectionBtn.addEventListener('click', saveReflectionToJournal);
+        shareReflectionBtn.addEventListener('click', shareReflectionWithSoonPsy);
+    }
+
+    function startReflection() {
+        if (isReflectionActive) return;
+        isReflectionActive = true;
+        reflectionTime = 5 * 60;
+        const randomIndex = Math.floor(Math.random() * reflectionScenarios.length);
+        scenarioDisplay.textContent = reflectionScenarios[randomIndex];
+        const quoteIndex = Math.floor(Math.random() * wisdomQuotes.length);
+        quoteDisplay.textContent = `"${wisdomQuotes[quoteIndex]}"`;
+        responseArea.disabled = false;
+        responseArea.value = '';
+        responseArea.focus();
+        startReflectionBtn.style.display = 'none';
+        stopReflectionBtn.style.display = 'inline-block';
+        updateTimerDisplay();
+        reflectionInterval = setInterval(() => {
+            reflectionTime--;
+            updateTimerDisplay();
+            if (reflectionTime <= 0) {
+                stopReflection();
+                showTemporaryMessage("Reflection time is complete. Great job!");
+            }
+        }, 1000);
+    }
+
+    function stopReflection() {
+        clearInterval(reflectionInterval);
+        isReflectionActive = false;
+        startReflectionBtn.style.display = 'inline-block';
+        stopReflectionBtn.style.display = 'none';
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(reflectionTime / 60);
+        const seconds = reflectionTime % 60;
+        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function shareReflectionWithSoonPsy() {
+        const content = responseArea.value.trim();
+        if (!content) {
+            showTemporaryMessage("Please write your reflection before sharing");
+            return;
+        }
+        const userContext = getUserContextData();
+        const context = `User reflection: "${content}". Current context: ${JSON.stringify(userContext)}. Provide psychological insights on thoughts and feelings.`;
+        sendToSoonPsy(content, context);
+    }
+
+    function saveReflectionToJournal() {
+        const content = responseArea.value.trim();
+        if (!content) {
+            showTemporaryMessage("Please write your reflection before saving");
+            return;
+        }
+
+        showTemporaryMessage("Reflection saved to journal successfully!");
+
+        const now = new Date();
+        const journalEntries = JSON.parse(localStorage.getItem('soon_journal') || '[]');
+        journalEntries.unshift({
+            date: now.toISOString(),
+            content: `Reflection: ${content}`,
+            mood: 'Reflective'
+        });
+        localStorage.setItem('soon_journal', JSON.stringify(journalEntries));
+
+        responseArea.value = '';
+        navigateToRelaxation();
+    }
+
+    function setupMeditation() {
+        startMeditationBtn.addEventListener('click', startMeditation);
+        stopMeditationBtn.addEventListener('click', stopMeditation);
+    }
+
+    function startMeditation() {
+        if (isMeditating) return;
+        isMeditating = true;
+        breathingPhase = 'inhale';
+        circleSize = 100;
+        const breathingCircle = document.getElementById('breathing-circle');
+        breathingCircle.style.width = circleSize + 'px';
+        breathingCircle.style.height = circleSize + 'px';
+        circleText.textContent = 'Inhale';
+        breathingInstruction.textContent = "Take a deep breath. Inhale...";
+        meditationInterval = setInterval(() => {
+            if (breathingPhase === 'inhale') {
+                circleSize += 2;
+                if (circleSize >= 200) {
+                    breathingPhase = 'hold';
+                    circleText.textContent = 'Hold';
+                    breathingInstruction.textContent = "Hold your breath...";
+                }
+            } else if (breathingPhase === 'hold') {
+                if (circleSize >= 200) {
+                    breathingPhase = 'exhale';
+                    circleText.textContent = 'Exhale';
+                    breathingInstruction.textContent = "Exhale slowly...";
+                }
+            } else if (breathingPhase === 'exhale') {
+                circleSize -= 2;
+                if (circleSize <= 100) {
+                    breathingPhase = 'inhale';
+                    circleText.textContent = 'Inhale';
+                    breathingInstruction.textContent = "Inhale deeply...";
+                }
+            }
+            breathingCircle.style.width = circleSize + 'px';
+            breathingCircle.style.height = circleSize + 'px';
+        }, 100);
+    }
+
+    function stopMeditation() {
+        clearInterval(meditationInterval);
+        isMeditating = false;
+        breathingInstruction.textContent = "Take a deep breath. Inhale... then exhale.";
+        circleSize = 100;
+        const breathingCircle = document.getElementById('breathing-circle');
+        breathingCircle.style.width = circleSize + 'px';
+        breathingCircle.style.height = circleSize + 'px';
+    }
+
+    function setupSoundControls() {
+        toggleMusicBtn.addEventListener('click', toggleBackgroundMusic);
+        toggleNatureBtn.addEventListener('click', toggleNatureSounds);
+        bgMusic.volume = 0.3;
+        bgMusic.play();
+        musicEnabled = true;
+        toggleMusicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+    }
+
+    function setupPiano() {
+        pianoKeys.forEach(key => {
+            key.addEventListener('mousedown', function() {
+                this.classList.add('active');
+                playNote(this.dataset.note);
+            });
+            key.addEventListener('mouseup', function() {
+                this.classList.remove('active');
+            });
+            key.addEventListener('mouseleave', function() {
+                this.classList.remove('active');
+            });
+        });
+    }
+
+    function setupMusicPlayer() {
+        musicPlayPauseBtn.addEventListener('click', function() {
+            if (isMusicPlaying) {
+                relaxingMusic.pause();
+                this.innerHTML = '<i class="fas fa-play"></i>';
+            } else {
+                relaxingMusic.play();
+                this.innerHTML = '<i class="fas fa-pause"></i>';
+                relaxingMusic.addEventListener('timeupdate', function() {
+                    const percent = (relaxingMusic.currentTime / relaxingMusic.duration) * 100;
+                    musicProgress.style.width = percent + '%';
+                });
+            }
+            isMusicPlaying = !isMusicPlaying;
+        });
+    }
+
+    // Unchanged functions: setupPositiveAffirmations, setupWalkTracker, setupFoodTracking, playSound, stopSound, copyToJournal (removed, replaced), shareWithAI (replaced), playNote, stopPiano, changeVolume, toggleBackgroundMusic, toggleNatureSounds, showQuoteNotification, etc.
+
+    function setupPositiveAffirmations() {
+        const generateAffirmationBtn = document.getElementById('generate-affirmation');
+        const affirmationDisplay = document.getElementById('affirmation-display');
+        generateAffirmationBtn.addEventListener('click', function() {
+            const randomIndex = Math.floor(Math.random() * positiveAffirmations.length);
+            affirmationDisplay.textContent = positiveAffirmations[randomIndex];
+        });
+    }
+
+    function setupWalkTracker() {
+        const startWalkBtn = document.getElementById('start-walk');
+        const stopWalkBtn = document.getElementById('stop-walk');
+        const walkTimer = document.getElementById('walk-timer');
+        startWalkBtn.addEventListener('click', startWalk);
+        stopWalkBtn.addEventListener('click', stopWalk);
+    }
+
+    function startWalk() {
+        if (isWalking) return;
+        isWalking = true;
+        walkTime = 30 * 60;
+        updateWalkTimer();
+        document.getElementById('start-walk').style.display = 'none';
+        document.getElementById('stop-walk').style.display = 'inline-block';
+        walkInterval = setInterval(() => {
+            walkTime--;
+            updateWalkTimer();
+            if (walkTime <= 0) {
+                stopWalk();
+                showTemporaryMessage("Walk complete! Great job contributing to your mental health.");
+            }
+        }, 1000);
+    }
+
+    function stopWalk() {
+        clearInterval(walkInterval);
+        isWalking = false;
+        document.getElementById('start-walk').style.display = 'inline-block';
+        document.getElementById('stop-walk').style.display = 'none';
+    }
+
+    function updateWalkTimer() {
+        const minutes = Math.floor(walkTime / 60);
+        const seconds = walkTime % 60;
+        document.getElementById('walk-timer').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function setupFoodTracking() {
+        const logFoodBtn = document.getElementById('log-food');
+        const foodInput = document.getElementById('food-input');
+        const foodList = document.getElementById('food-list');
+        logFoodBtn.addEventListener('click', function() {
+            const foodItem = foodInput.value.trim();
+            if (foodItem) {
+                foodData.push(foodItem);
+                updateFoodList();
+                foodInput.value = '';
+                showTemporaryMessage(`Logged healthy food: ${foodItem}`);
+            } else {
+                showTemporaryMessage("Please enter a food item");
+            }
+        });
+    }
+
+    function updateFoodList() {
+        const foodList = document.getElementById('food-list');
+        foodList.innerHTML = '';
+        foodData.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            foodList.appendChild(li);
+        });
+    }
+
+    function playSound(type) {
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+        }
+
+        const sound = natureSounds[type];
+        if (!sound) return;
+
+        const container = document.getElementById('nature-sounds-container');
+        container.style.backgroundImage = `url(${sound.bgImage})`;
+
+        currentAudio = new Audio(sound.url);
+        currentAudio.loop = true;
+        currentAudio.play();
+    }
+
+    function stopSound() {
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            currentAudio = null;
+        }
+
+        const container = document.getElementById('nature-sounds-container');
+        container.style.backgroundImage = 'none';
+    }
+
+    function playNote(note) {
+        if (playingNotes[note]) {
+            playingNotes[note].stop();
+        }
+
+        const audio = new Audio(pianoNotes[note]);
+        audio.play();
+        playingNotes[note] = audio;
+    }
+
+    function stopPiano() {
+        for (const note in playingNotes) {
+            if (playingNotes[note]) {
+                playingNotes[note].pause();
+                playingNotes[note].currentTime = 0;
+            }
+        }
+        playingNotes = {};
+    }
+
+    function changeVolume(delta) {
+        relaxingMusic.volume = Math.min(1, Math.max(0, relaxingMusic.volume + delta));
+    }
+
+    function toggleBackgroundMusic() {
+        if (musicEnabled) {
+            bgMusic.pause();
+            toggleMusicBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            musicEnabled = false;
+        } else {
+            bgMusic.play();
+            toggleMusicBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            musicEnabled = true;
+        }
+    }
+
+    function toggleNatureSounds() {
+        const natureAudio = document.getElementById('nature-sounds');
+        if (natureEnabled) {
+            natureAudio.pause();
+            toggleNatureBtn.innerHTML = '<i class="fas fa-tree"></i>';
+            natureEnabled = false;
+        } else {
+            natureAudio.play();
+            natureAudio.volume = 0.5;
+            toggleNatureBtn.innerHTML = '<i class="fas fa-tree" style="color: var(--primary);"></i>';
+            natureEnabled = true;
+        }
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', initApp);
+</script>
+</body>
+</html>
